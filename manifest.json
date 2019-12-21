@@ -1,0 +1,40 @@
+{
+	"name": "Duo",
+	"version": "1.0",
+	"description": "1-on-1 peer learning for Khan Academy.",
+	"permissions": [
+		"webRequest",
+		"activeTab",
+		"declarativeContent",
+		"*://*.khanacademy.org/"
+	],
+	"background": {
+		"scripts": ["thirdParty/jquery-3.3.1.min.js", "background.js"],
+		"persistent": true
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://*.khanacademy.org/*"],
+			"css": ["myStyles.css"],
+			"js": ["thirdParty/handlebars.min.js", "thirdParty/jquery-3.3.1.min.js", "contentScript.js"]
+		}
+	],
+	"page_action": {
+		"default_icon": {
+			"16": "images/icon16.png",
+      "48": "images/icon48.png",
+			"128": "images/icon128.png",
+			"512": "images/icon512.png"  
+		}
+	},
+	"icons": {
+		"16": "images/icon16.png",
+		"48": "images/icon48.png",
+		"128": "images/icon128.png",
+		"512": "images/icon512.png"  
+	},
+	"web_accessible_resources": [
+		"images/*"
+	],
+	"manifest_version": 2
+}
