@@ -9,7 +9,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from models import StudentMastery
+from models import *
 
 @app.route('/getmsg/', methods=['GET'])
 def respond():
@@ -33,6 +33,36 @@ def respond():
 
     # Return the response in json format
     return jsonify(response)
+
+@app.route('/student-mastery/post/', methods=['GET'])
+def post_student_mastery():
+    skill_id = request.args.get("skill_id", None)
+    student_id = request.args.get("student_id", None)
+    try:
+        student_mastery = StudentMastery(
+            skill_id = skill_id,
+            student_id = student_id
+        )
+        db.session.add(student_mastery)
+        db.session.commit()
+
+        return jsonify({
+            "MESSAGE": f"Data successfully saved to database. Student {skill_id} achieved mastery in {student_id}.",
+            "METHOD" : "POST"
+        })
+    except:
+        return jsonify({
+            "ERROR": "Unable to add item to database."
+        })
+
+@app.route('/student-mastery/get/', methods=['GET'])
+def get_student_mastery():
+    skill_id = request.args.get("skill_id", None)
+    results = StudentMastery.query.filter_by(skill_id=skill_id)
+    output = ''
+    for result in results:
+        output += f'{result.student_id}<br>'
+    return output
 
 @app.route('/post/', methods=['POST'])
 def post_something():
