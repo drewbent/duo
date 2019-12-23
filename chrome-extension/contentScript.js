@@ -29,6 +29,20 @@ var checkScore = function(newHTML) {
 		}
 	}
 
+	var request = $.ajax({
+		type: "GET",
+		url: 'https://duo-learn.herokuapp.com/student-mastery/get/',
+		data: {
+			skill_id: 123
+		}
+	});
+	
+	request.done(function(data) {
+			// your success code here
+			console.log("success");
+			console.log(data);
+	});
+
 	console.log("The score is " + String(score) + " out of " + String(outOf));
 };
 

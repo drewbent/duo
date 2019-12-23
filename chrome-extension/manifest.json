@@ -6,7 +6,8 @@
 		"webRequest",
 		"activeTab",
 		"declarativeContent",
-		"*://*.khanacademy.org/"
+		"*://*.khanacademy.org/",
+		"*://duo-learn.herokuapp.com/"
 	],
 	"background": {
 		"scripts": ["thirdParty/jquery-3.3.1.min.js", "background.js"],
