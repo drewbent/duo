@@ -6,4 +6,4 @@ To run the Chrome extension:
 3. Visit Khan Academy (e.g. https://www.khanacademy.org/math/algebra).
 
 To deploy the API to Heroku:
-1. Run `git subtree push --prefix app heroku master`
+1. Run `git subtree push --prefix api heroku master`

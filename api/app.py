@@ -1,7 +1,10 @@
 # From: https://stackabuse.com/deploying-a-flask-application-to-heroku/#disqus_thread
 
 from flask import Flask, request, jsonify
+import os
+
 app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/getmsg/', methods=['GET'])
 def respond():
@@ -45,7 +48,7 @@ def post_something():
 # A welcome message to test our server
 @app.route('/')
 def index():
-    return "<h1>Welcome to our server !!</h1>"
+    return f"<h1>Welcome to our server !!</h1><h2>{os.environ['APP_SETTINGS']}</h2>"
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
