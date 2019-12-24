@@ -5,9 +5,11 @@
 	"permissions": [
 		"webRequest",
 		"activeTab",
+		"tabs",
 		"declarativeContent",
 		"*://*.khanacademy.org/",
-		"*://duo-learn.herokuapp.com/"
+		"*://duo-learn.herokuapp.com/",
+		"storage"
 	],
 	"background": {
 		"scripts": ["thirdParty/jquery-3.3.1.min.js", "background.js"],
@@ -21,11 +23,12 @@
 		}
 	],
 	"page_action": {
+		"default_popup": "popup.html",
 		"default_icon": {
-			"16": "images/icon16.png",
-      "48": "images/icon48.png",
-			"128": "images/icon128.png",
-			"512": "images/icon512.png"  
+			"16": "images/icon16-dimmed.png",
+      "48": "images/icon48-dimmed.png",
+			"128": "images/icon128-dimmed.png",
+			"512": "images/icon512-dimmed.png"  
 		}
 	},
 	"icons": {
