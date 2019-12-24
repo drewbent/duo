@@ -1,17 +1,20 @@
-// Add callback for ajax requests.
+// Introduce callback for AJAX requests; to be used by dispatch.js.
 const callback = function(details) {
+	// First, make sure it's a successful HTTP request. 
 	if (details.type == "xmlhttprequest" && details.statusCode == 200) {
+		// If it is, send a message that can be picked up by dispatch.js.
 		chrome.tabs.sendMessage(details.tabId, {
 			action: "web_request",
 			payload: details
 		}, function(response) {});
 	}
 };
-const filter = {urls: ["*://*.khanacademy.org/*"]};
+const filter = {urls: ["*://*.khanacademy.org/*"]}; // for all KA pages
 const opt_extraInfoSpec = [];
 chrome.webRequest.onCompleted.addListener(callback, filter, opt_extraInfoSpec);
 
-// Enable page action popup
+// Enable the Duo popup (i.e. page action) for all URLs.
+// This allows users to click the Chrome extension icon and see the popup.
 chrome.runtime.onInstalled.addListener(function() {
 	chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 		chrome.declarativeContent.onPageChanged.addRules([{
@@ -24,8 +27,8 @@ chrome.runtime.onInstalled.addListener(function() {
 	});
 });
 
-// Every time a new tab is opened or a new URL loaded, update the icon accordingly.
-// In particular, the icon should always be dimmed except when on a KA webpage.
+// Every time a new tab is opened or a new URL loaded, update the icon
+// accordingly. The icon should always be dimmed except when on a KA webpage.
 const newTabURL = function(tabId, url) {
 	matching_regex = RegExp(".*\:\/\/.*khanacademy\.org.*");
 	if (matching_regex.test(url)) {
@@ -50,9 +53,11 @@ const newTabURL = function(tabId, url) {
 		}, () => {})
 	}
 };
+// Listen for the url to change on the current tab.
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	newTabURL(tabId, changeInfo.url);
-}); 
+});
+// Listen for new tabs to be selected.
 chrome.tabs.onActivated.addListener(function(activeInfo) {
 	chrome.tabs.getSelected(null,function(tab) {
 		newTabURL(activeInfo.tabId, tab.url);

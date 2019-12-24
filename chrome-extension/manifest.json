@@ -19,8 +19,13 @@
 	"content_scripts": [
 		{
 			"matches": ["https://*.khanacademy.org/*"],
-			"css": ["myStyles.css"],
-			"js": ["thirdParty/handlebars.min.js", "thirdParty/jquery-3.3.1.min.js", "contentScript.js"]
+			"css": ["styles.css"],
+			"js": ["thirdParty/handlebars.min.js", "thirdParty/jquery-3.3.1.min.js",
+				"content-script.js",
+				"dispatch.js",
+				"dom-parser.js",
+				"ui.js",
+				"duo-api.js"]
 		}
 	],
 	"page_action": {
@@ -39,7 +44,8 @@
 		"512": "images/icon512.png"  
 	},
 	"web_accessible_resources": [
-		"images/*"
+		"images/*",
+		"templates/*"
 	],
 	"manifest_version": 2
 }
