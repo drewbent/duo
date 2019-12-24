@@ -29,11 +29,41 @@ var checkScore = function(newHTML) {
 		}
 	}
 
+	chrome.storage.sync.get(["userId", "loggedIn"], function(r) {
+    if (r.loggedIn) {
+      saveSkillScoreToDB(r.userId, score, outOf);
+    }
+  });
+
+	console.log("The score is " + String(score) + " out of " + String(outOf));
+};
+
+const saveSkillScoreToDB = function(userId, score, outOf) {
+	// course, unit, skill
+	// mastery_points_start
+	// mastery_points_end
+	const skill = $("[data-test-id='modal-title']").text();
+	const unit = $("[data-test-id='unit-block-title']").text();
+	const course = $("[aria-label='breadcrumbs'] a").text();
+
+	const classSection = 0; // TODO(drew): complete
+	const masteryPointsStart = -1; // TODO(drew): complete
+	const masteryPointsEnd = -1; // TODO(drew): complete
+	$("[aria-label='breadcrumbs'] a").text();
+
 	var request = $.ajax({
-		type: "GET",
-		url: 'https://duo-learn.herokuapp.com/student-mastery/get/',
+		type: "POST",
+		url: 'http://127.0.0.1:5000/duo-user-completed-skills/',
 		data: {
-			skill_id: 123
+			user_id: userId,
+			course: course,
+			unit: unit,
+			skill: skill,
+			class_section: classSection,
+			questions_correct: score,
+			questions_out_of: outOf,
+			mastery_points_start: masteryPointsStart,
+			mastery_points_end: masteryPointsEnd
 		}
 	});
 	
@@ -42,8 +72,6 @@ var checkScore = function(newHTML) {
 			console.log("success");
 			console.log(data);
 	});
-
-	console.log("The score is " + String(score) + " out of " + String(outOf));
 };
 
 // Create an observer instance to track DOM mutations.
@@ -55,6 +83,7 @@ var observer = new MutationObserver(function (mutations) {
 			
 			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
 			if (correctAriaLabel.exists()) {
+				// TODO(drew): clean up this function and what calls what.
 				checkScore(newHTML);
 			}
 

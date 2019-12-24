@@ -9,6 +9,7 @@
 		"declarativeContent",
 		"*://*.khanacademy.org/",
 		"*://duo-learn.herokuapp.com/",
+		"http://127.0.0.1/*",
 		"storage"
 	],
 	"background": {
