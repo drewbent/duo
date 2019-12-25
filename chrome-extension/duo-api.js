@@ -2,14 +2,14 @@
 class DuoAPI {
 
   /**
-   * Adds the Duo logo to the course page in the top left corner.
-   * (e.g. on https://www.khanacademy.org/math/algebra)
-   * @param subjectProgressSidebar A jQuery object containing the sidebar nav
-   *    item in which the logo is to be added
+   * Save new skill score data to the PeerX backend.
+   * @param data an object containing course, unit, skill, class_section,
+   *   questionsCorrect, questionsOutOf, masteryPointsStart, masteryPointsEnd
    */
   static saveSkillScoreToDB(data) {
     chrome.storage.sync.get(["userId", "loggedIn"], function(r) {
       if (r.loggedIn) {
+        // User needs to be logged into PeerX if we are to call the API.
         var request = $.ajax({
           type: "POST",
           url: 'http://127.0.0.1:5000/duo-user-completed-skills/', // TODO(drew): make this work on production
@@ -34,7 +34,8 @@ class DuoAPI {
         request.fail(function(error) {
           console.log(error);
         });
-      } else {
+      }
+      else {
         console.log("Logged out.");
       }
     });

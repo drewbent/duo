@@ -25,8 +25,7 @@
 				"dispatch.js",
 				"dom-parser.js",
 				"ui.js",
-				"duo-api.js",
-				"ka-api.js"]
+				"duo-api.js"]
 		}
 	],
 	"page_action": {

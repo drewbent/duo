@@ -24,7 +24,7 @@ var observer = new MutationObserver(function (mutations) {
       // If correctAriaLabel exists, then a skill has been completed. 
 			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
 			if (correctAriaLabel.exists()) {
-				const data = DOMParser.getTaskScoreData(newHTML);
+				const data = DOMParser.getSkillScoreData(newHTML);
         DuoAPI.saveSkillScoreToDB(data);
       }
       
@@ -45,10 +45,8 @@ observer.observe(document.body, observerConfig); // Enable the observer.
 /** 
  * Track AJAX requests, listening to messages sent by background.js.
  * 
- * Note: Why do we usually have to repeat the AJAX ourselves? Given the nature
- * of Chrome extensions, intercepted web requests never include response
- * bodies. Thus, we recreate the calls in order to get the necessary data from
- * the response bodies.
+ * Note: This is currently not being used as we're relying on parsing the DOM
+ * instead of intercepting AJAX requests.
  */
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
   /**
@@ -72,40 +70,6 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
       ContentSession.dataMappedToRequestIds[requestId] = msg.payload;
     }
   }
-
-  /**
-   * When a task is first loaded, we intercept an API call and then replicate
-   * it ourselves in order to obtain the KA task ID, which we save as we'll
-   * need it later.
-   * Note: We need header data to do this, so we do it at the
-   * 'web_request_headers_sent' part of the request's lifecycle.
-   * Note: We need !'calledByChrome=true' in order to make sure we don't create
-   * an infinite loop of these API calls triggering more calls.
-   */
-  if (msg.action == "web_request_headers_sent"
-      && msg.payload.url.includes("api/internal/user/task/practice/")
-      && !msg.payload.url.includes("calledByChrome=true")) {
-    
-    /**KhanAPI.getTaskId(msg.payload, function(currentKATaskId) {
-      ContentSession.currentKATaskId = currentKATaskId;
-    });**/
-  }
-
-  /**
-   * When a task is completed, we intercept the API call and then replicate it
-   * ourselves in order to obtain task completion data (i.e. score).
-   * Note: We need header data to do this, so we do it at the
-   * 'web_request_headers_sent' part of the request's lifecycle.
-   */
-  if (msg.action == "web_request_headers_sent"
-      && msg.payload.url.includes("opname=getEotCardDetails")
-      && !msg.payload.url.includes("calledByChrome=true")) {
-    
-    /**KhanAPI.getEotCardDetails(msg.payload, function(data) {
-      DuoAPI.saveSkillScoreToDB(data);
-    });**/
-  }
-
 
   sendResponse({ success: true });
 });
