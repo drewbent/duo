@@ -6,9 +6,9 @@ class DOMParser {
     var outOf = -1;
   
     for (var i = 0; i <= 7; i++) {
-      scoreOutOf4 = newHTML.find("span[aria-label='" + String(i) +
+      var scoreOutOf4 = newHTML.find("span[aria-label='" + String(i) +
         " out of 4 correct']");
-      scoreOutOf7 = newHTML.find("span[aria-label='" + String(i) +
+      var scoreOutOf7 = newHTML.find("span[aria-label='" + String(i) +
         " out of 7 correct']");
       
       if (scoreOutOf4.exists()) {
@@ -30,4 +30,8 @@ class DOMParser {
   
     console.log("The score is " + String(score) + " out of " + String(outOf));
   };
+
+  const skill = $("[data-test-id='modal-title']").text();
+  const unit = $("[data-test-id='unit-block-title']").text();
+  const course = $("[aria-label='breadcrumbs'] a").text();
 }

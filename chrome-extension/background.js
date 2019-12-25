@@ -1,17 +1,32 @@
-// Introduce callback for AJAX requests; to be used by dispatch.js.
-const callback = function(details) {
-	// First, make sure it's a successful HTTP request. 
+/**
+ * Add callback for completed AJAX requests; to be used by dispatch.js.
+ */
+chrome.webRequest.onCompleted.addListener(function(details) {
+	// First, make sure it's a successful HTTP request.
+	// TODO(drew): only consider current tab?
 	if (details.type == "xmlhttprequest" && details.statusCode == 200) {
 		// If it is, send a message that can be picked up by dispatch.js.
 		chrome.tabs.sendMessage(details.tabId, {
-			action: "web_request",
+			action: "web_request_completed",
 			payload: details
 		}, function(response) {});
 	}
-};
-const filter = {urls: ["*://*.khanacademy.org/*"]}; // for all KA pages
-const opt_extraInfoSpec = [];
-chrome.webRequest.onCompleted.addListener(callback, filter, opt_extraInfoSpec);
+}, {urls: ["*://*.khanacademy.org/*"]}, []);
+
+/**
+ * Add callback for AJAX requests earlier on in their lifecycle.
+ * This allows us to capture headers, including cookies, which are not
+ * contained in the completed webRequest callback.
+ * Once again, this is used by dispatch.js.
+ */
+chrome.webRequest.onSendHeaders.addListener(function(details) {
+	if (details.type == "xmlhttprequest") {
+		chrome.tabs.sendMessage(details.tabId, {
+			action: "web_request_headers_sent",
+			payload: details
+		}, function(response) {});
+	}
+}, {urls: ["*://*.khanacademy.org/*"]}, ["requestHeaders", "extraHeaders"]);
 
 // Enable the Duo popup (i.e. page action) for all URLs.
 // This allows users to click the Chrome extension icon and see the popup.
