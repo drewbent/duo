@@ -10,36 +10,32 @@ class DuoAPI {
   static saveSkillScoreToDB(data) {
     chrome.storage.sync.get(["userId", "loggedIn"], function(r) {
       if (r.loggedIn) {
-        const userId = r.userId;
-        const practiceAttempt = data.user.exerciseData.practiceAttempt;
-        const score = practiceAttempt.numCorrect;
-        const outOf = practiceAttempt.numAttempted;
-        const mastery_points_start = practiceAttempt.startingFpmLevel; // todo
-        const mastery_points_end = practiceAttempt.endingFpmLevel; // todo
-        const classSection = 0; // TODO(drew): make this real
-        const course = 0; // TODO(drew): make this real
-        const unit = 0; // TODO(drew): make this real
-        const skill = 0; // TODO(drew): make this real
-
         var request = $.ajax({
           type: "POST",
           url: 'http://127.0.0.1:5000/duo-user-completed-skills/', // TODO(drew): make this work on production
           data: {
-            user_id: userId,
-            course: course,
-            unit: unit,
-            skill: skill,
-            class_section: classSection,
-            questions_correct: score,
-            questions_out_of: outOf,
-            mastery_points_start: masteryPointsStart,
-            mastery_points_end: masteryPointsEnd
-          }
+            user_id: r.userId,
+            course: data.course,
+            unit: data.unit,
+            skill: data.skill,
+            class_section: data.classSection,
+            questions_correct: data.questionsCorrect,
+            questions_out_of: data.questionsOutOf,
+            mastery_points_start: data.masteryPointsStart,
+            mastery_points_end: data.masteryPointsEnd
+          },
+          dataType: "json"
         });
         
-        request.done(function(data) {
-            console.log(data);
+        request.done(function(success) {
+            console.log(success);
         });
+
+        request.fail(function(error) {
+          console.log(error);
+        });
+      } else {
+        console.log("Logged out.");
       }
     });
   };

@@ -25,4 +25,6 @@ class ContentSession {
 	
 	/* The KA taskId associated with the current task/skill. */
 	static currentKATaskId;
+
+	static masteryPointsStart;
 }

@@ -3,6 +3,45 @@
  * trigger other functions as appropriate.
  */
 
+/**
+ * Create an observer instance to track DOM mutations.
+ */
+var observer = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    const addedNodes = mutation.addedNodes
+    // Look to see if the mutation included any new DOM nodes. 
+		if (addedNodes.length > 0) {
+			const newHTML = $(addedNodes[0].outerHTML);
+      
+      // If subjectProgressSidebar exists, then it's time to add the Duo logo
+      // to the page in the sidebar.
+      const subjectProgressSidebar = newHTML.find(
+        "nav[data-test-id='subject-progress-sidebar']");
+			if (subjectProgressSidebar.exists()) {
+				UI.addDuoLogoToCoursePage(subjectProgressSidebar);
+      }
+      
+      // If correctAriaLabel exists, then a skill has been completed. 
+			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
+			if (correctAriaLabel.exists()) {
+				const data = DOMParser.getTaskScoreData(newHTML);
+        DuoAPI.saveSkillScoreToDB(data);
+      }
+      
+      const skillTaskTitle = newHTML.find("[data-test-id='modal-title']");
+      if (skillTaskTitle.exists()) {
+        ContentSession.masteryPointsStart = DOMParser.getSkillMasteryPoints();
+      }
+		}
+  });
+});
+var observerConfig = {
+  childList: true, 
+  subtree: true
+};
+observer.observe(document.body, observerConfig); // Enable the observer.
+
+
 /** 
  * Track AJAX requests, listening to messages sent by background.js.
  * 
@@ -47,11 +86,9 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
       && msg.payload.url.includes("api/internal/user/task/practice/")
       && !msg.payload.url.includes("calledByChrome=true")) {
     
-    KhanAPI.getTaskId(msg.payload, function(currentKATaskId) {
+    /**KhanAPI.getTaskId(msg.payload, function(currentKATaskId) {
       ContentSession.currentKATaskId = currentKATaskId;
-      console.log("yay");
-      console.log(ContentSession.currentKATaskId);
-    });
+    });**/
   }
 
   /**
@@ -64,45 +101,11 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
       && msg.payload.url.includes("opname=getEotCardDetails")
       && !msg.payload.url.includes("calledByChrome=true")) {
     
-    KhanAPI.getEotCardDetails(msg.payload, function(data) {
-      console.log(data);
-      //DuoAPI.saveSkillScoreToDB(data);
-    });
+    /**KhanAPI.getEotCardDetails(msg.payload, function(data) {
+      DuoAPI.saveSkillScoreToDB(data);
+    });**/
   }
 
 
   sendResponse({ success: true });
 });
-
-/**
- * Create an observer instance to track DOM mutations.
- */
-var observer = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    const addedNodes = mutation.addedNodes
-    // Look to see if the mutation included any new DOM nodes. 
-		if (addedNodes.length > 0) {
-			const newHTML = $(addedNodes[0].outerHTML);
-      
-      // If subjectProgressSidebar exists, then it's time to add the Duo logo
-      // to the page in the sidebar.
-      const subjectProgressSidebar = newHTML.find(
-        "nav[data-test-id='subject-progress-sidebar']");
-			if (subjectProgressSidebar.exists()) {
-				UI.addDuoLogoToCoursePage(subjectProgressSidebar);
-      }
-      
-      // If correctAriaLabel exists, then a skill has been completed. 
-			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
-			if (correctAriaLabel.exists()) {
-				// TODO(drew): clean up this function and what calls what.
-				// DOMParser.checkScore(newHTML);
-			}
-		}
-  });
-});
-var observerConfig = {
-  childList: true, 
-  subtree: true
-};
-observer.observe(document.body, observerConfig); // Enable the observer.
