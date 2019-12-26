@@ -30,7 +30,7 @@ class DOMParser {
       course: course,
       unit: unit,
       skill: skill,
-      class_section: classSection,
+      classSection: classSection,
       questionsCorrect: questionsCorrect,
       questionsOutOf: questionsOutOf,
       masteryPointsStart: masteryPointsStart,

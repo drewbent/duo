@@ -6,7 +6,7 @@ class DuoAPI {
    * @param data an object containing course, unit, skill, class_section,
    *   questionsCorrect, questionsOutOf, masteryPointsStart, masteryPointsEnd
    */
-  static saveSkillScoreToDB(data) {
+  static saveSkillScoreToDB(data, callback) {
     chrome.storage.sync.get(["userId", "loggedIn"], function(r) {
       if (r.loggedIn) {
         // User needs to be logged into PeerX if we are to call the API.
@@ -28,7 +28,8 @@ class DuoAPI {
         });
         
         request.done(function(success) {
-            console.log(success);
+          console.log(success);
+          callback(success);
         });
 
         request.fail(function(error) {

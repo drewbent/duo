@@ -25,7 +25,11 @@ var observer = new MutationObserver(function (mutations) {
 			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
 			if (correctAriaLabel.exists()) {
 				const data = DOMParser.getSkillScoreData(newHTML);
-        DuoAPI.saveSkillScoreToDB(data);
+        DuoAPI.saveSkillScoreToDB(data, function(success) {
+          if ("duo-help" in success) {
+            UI.addHelpOfferToEndOfTask(success["duo-help"]);
+          }
+        });
       }
       
       const skillTaskTitle = newHTML.find("[data-test-id='modal-title']");

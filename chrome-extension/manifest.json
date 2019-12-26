@@ -45,7 +45,8 @@
 	},
 	"web_accessible_resources": [
 		"images/*",
-		"templates/*"
+		"templates/*",
+		"thirdParty/fonts/*"
 	],
 	"manifest_version": 2
 }
