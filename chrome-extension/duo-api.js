@@ -5,6 +5,9 @@ class DuoAPI {
    * Save new skill score data to the PeerX backend.
    * @param data an object containing course, unit, skill, class_section,
    *   questionsCorrect, questionsOutOf, masteryPointsStart, masteryPointsEnd
+   * @param callback a function that is called after a successful API call and
+   *   includes the result of the API call as an argument (this may include
+   *   data about a suggested peer guide if the student is struggling)
    */
   static saveSkillScoreToDB(data, callback) {
     chrome.storage.sync.get(["userId", "loggedIn"], function(r) {

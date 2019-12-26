@@ -21,12 +21,18 @@ var observer = new MutationObserver(function (mutations) {
 				UI.addDuoLogoToCoursePage(subjectProgressSidebar);
       }
       
-      // If correctAriaLabel exists, then a skill has been completed. 
+      // If correctAriaLabel exists, then a skill has been completed.
 			const correctAriaLabel = newHTML.find("span[aria-label*='correct']");
 			if (correctAriaLabel.exists()) {
-				const data = DOMParser.getSkillScoreData(newHTML);
+        // Parse the DOM to obtain the latest skill data.
+        const data = DOMParser.getSkillScoreData(newHTML);
+        // Save the latest skill data to the Duo backend.
         DuoAPI.saveSkillScoreToDB(data, function(success) {
+          // The return object of the API call may include a suggested peer
+          // guide if the student is determined to be struggling. In this
+          // case, the UI function will display this offer for help.
           if ("duo-help" in success) {
+            // The student needs help.
             UI.addHelpOfferToEndOfTask(success["duo-help"]);
           }
         });

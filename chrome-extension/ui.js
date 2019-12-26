@@ -1,6 +1,12 @@
 /* A class for introducing new UI into the KA website. */
 class UI {
 
+  /**
+   * Add info about a peer guide for a struggling student after compleeting
+   * a task. 
+   * @param duoHelpData the object returned by the API with details on the
+   *   peer guide
+   */
   static addHelpOfferToEndOfTask(duoHelpData) {
     const guideId = duoHelpData["guide_id"];
     const guideName = duoHelpData["guide_name"];
@@ -28,7 +34,7 @@ class UI {
   }
 
   /**
-   * Adds the Duo logo to the course page in the top left corner.
+   * Add the Duo logo to the course page in the top left corner.
    * (e.g. on https://www.khanacademy.org/math/algebra)
    */
   static addDuoLogoToCoursePage() {
