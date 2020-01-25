@@ -48,9 +48,8 @@ class UI {
       const logoHTML = template({ logoURL: logoURL });
 
       // Add the new logo HTML to the DOM.
-      const subjectProgressSidebar = $(
-        "nav[data-test-id='subject-progress-sidebar']");
-      subjectProgressSidebar.find("h4").parent().append(logoHTML);
+      const subjectProgressSidebarTitle = $("#subject-progress-sidebar-title");
+      subjectProgressSidebarTitle.parent().append(logoHTML);
     });
   }
 }

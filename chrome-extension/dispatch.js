@@ -13,12 +13,12 @@ var observer = new MutationObserver(function (mutations) {
 		if (addedNodes.length > 0) {
 			const newHTML = $(addedNodes[0].outerHTML);
       
-      // If subjectProgressSidebar exists, then it's time to add the Duo logo
-      // to the page in the sidebar.
-      const subjectProgressSidebar = newHTML.find(
-        "nav[data-test-id='subject-progress-sidebar']");
-			if (subjectProgressSidebar.exists()) {
-				UI.addDuoLogoToCoursePage(subjectProgressSidebar);
+      // If subjectProgressSidebar title exists, then it's time to add the Duo
+      // logo to the page in the sidebar.
+      const subjectProgressSidebarTitle = newHTML.find(
+        "#subject-progress-sidebar-title");
+			if (subjectProgressSidebarTitle.exists()) {
+				UI.addDuoLogoToCoursePage();
       }
       
       // If correctAriaLabel exists, then a skill has been completed.
