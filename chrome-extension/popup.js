@@ -2,16 +2,20 @@ $(document).ready(function() {
   refreshUI();
   
   $("#login #submit").click(function() {
-    const userId = $("#login input[name='username']").val();
-    console.log(userId);
+    // const userId = $("#login input[name='username']").val();
+    // console.log(userId);
 
-    chrome.storage.sync.set({
-        'userId': userId,
-        'loggedIn': true
-    }, function() {
-      console.log('User ID is set to ' + userId);
-      refreshUI();
-    });
+    // chrome.storage.sync.set({
+    //     'userId': userId,
+    //     'loggedIn': true
+    // }, function() {
+    //   console.log('User ID is set to ' + userId);
+    //   refreshUI();
+    // });
+    chrome.runtime.sendMessage({ action: "login", payload: {
+      email: "hello.com",
+      password: "goodbye",
+    }})
   });
 
   $("#profile #signout").click(function() {

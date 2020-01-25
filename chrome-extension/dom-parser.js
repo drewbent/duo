@@ -108,7 +108,8 @@ class DOMParser {
     var outOf = -1;
   
     for (var i = 0; i <= 7; i++) {
-      // TODO(drew): Confirm that there are no options beyond 4 or 7.
+      // TODO: Confirm that there are no options beyond 4 or 7.
+      // TODO: Find way to do this with arbitrary numbers (regex)
       var scoreOutOf4 = newHTML.find("span[aria-label='" + String(i) +
         " out of 4 correct']");
       var scoreOutOf7 = newHTML.find("span[aria-label='" + String(i) +
