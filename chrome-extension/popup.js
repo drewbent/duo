@@ -34,14 +34,7 @@ const updateWelcomeUI = function(userId) {
 
 const refreshUI = function() {
   chrome.storage.sync.get(['userId', 'loggedIn'], function(r) {
-    if (r.loggedIn) {
-      updateWelcomeUI(r.userId);
-      $("#login").hide();
-      $("#profile").show();
-      
-    } else {
-      $("#login").show();
-      $("#profile").hide();
-    }
+    $("#enter-email").show()
+    $("#profile").hide()
   });
 };
