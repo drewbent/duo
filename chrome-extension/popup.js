@@ -1,6 +1,17 @@
 $(document).ready(function() {
   refreshUI();
   
+$("#enter-email-button").click(() => {
+  chrome.runtime.sendMessage({ 
+    action: "com.duo.verifyEmail", 
+    payload: {
+      email: $("#enter-email-text-field").val()
+    }
+  }, response => {
+    console.log(response)
+  })
+})
+
   $("#login #submit").click(function() {
     // const userId = $("#login input[name='username']").val();
     // console.log(userId);
