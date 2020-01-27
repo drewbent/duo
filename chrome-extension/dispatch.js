@@ -26,6 +26,7 @@ var observer = new MutationObserver(function (mutations) {
 			if (correctAriaLabel.exists()) {
         // Parse the DOM to obtain the latest skill data.
         const data = DOMParser.getSkillScoreData(newHTML);
+        console.log(data);
         // Save the latest skill data to the Duo backend.
         DuoAPI.saveSkillScoreToDB(data, function(success) {
           // The return object of the API call may include a suggested peer
