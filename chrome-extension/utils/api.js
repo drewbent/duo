@@ -2,7 +2,7 @@ const API_URL = 'http://localhost:5000'
 
 function sendReq(path, data) {
   return new Promise((res, rej) => {
-    fetch(`${API_URL}/${path}`, data)
+    fetch(`${API_URL}${path}`, data)
       .then(response => response.json())
       .then(json => res(json))
       .catch(err => rej(err))

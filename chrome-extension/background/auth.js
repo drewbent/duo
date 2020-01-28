@@ -2,12 +2,20 @@
  * @fileoverview Listen for auth events sent from the popup, and act on them.
  */
 
-chrome.runtime.onMessage.addListener(async(request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action == 'com.duo.verifyEmail') {
     const { email } = request.payload
-    const data = await api.get(`/students?email=${email}`)
-    console.log(data)
-    return sendResponse(`We got the email: ${email}`)
+    api.get(`/students?email=${email}`)
+      .then(data => sendResponse(data))
+      .catch(err => sendResponse(err))
+    return true
+  }
+
+  if (request.action == 'com.duo.signUp') {
+    const { email, name, password } = request.payload
+    console.log(request.payload)
+    setTimeout(() => sendResponse({}), 1000)
+    return true
   }
 
   if (request.action == 'com.duo.login') {

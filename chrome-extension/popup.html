@@ -3,6 +3,7 @@
 <html>
   <head>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Ruluko&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="popup.css">
 
     <script src="thirdParty/jquery-3.3.1.min.js"></script>
@@ -10,25 +11,92 @@
   </head>
   <body>
     <div id="container">
-      <div id="title">Duo</div>
+      <div id="error-flash">
+        <p id="error-flash-text"></p>
+      </div>
+
+      <div id="loader"></div>
+      <div id="loader-spinner"></div>
+
+      <div id="title-bar">
+        <i id="back-button" class="material-icons">arrow_back</i>
+        <div id="title">Duo</div>
+      </div>
+
       <div id="enter-email">
         <div class="subtitle">Enter your email to get started.</div>
-        <div class="field">
+        <div>
           <input 
             class="text-field" 
             id="enter-email-text-field"
-            name="email"
             placeholder="example@school.com"
             type="text"
           >
           <button class="big-button" id="enter-email-button">Next</button>
         </div>
       </div>
-      <div id="profile">
-        <div id="profile-body">
-          <div id="welcome">Welcome!</div>
+
+      <div id="sign-up">
+        <div class="subtitle">Please create your account.</div>
+        <div>
+          <div class="field-title">First Name</div>
+          <input
+            id="first-name-input"
+            class="text-field" 
+            placeholder="Johnny"
+            type="text"
+            value="Johnny"
+          >
         </div>
-        <input type="submit" value="Sign out" id="signout">
+        <div>
+          <div class="field-title">Last Name</div>
+          <input 
+            id="last-name-input"
+            class="text-field" 
+            placeholder="Appleseed"
+            type="text"
+            value="Appleseed"
+          >
+        </div>
+        <div>
+          <div class="field-title">Password</div>
+          <input 
+            id="sign-up-password-input"
+            class="text-field"
+            placeholder="Password"
+            type="password"
+            value="password"
+          >
+        </div>
+        <div>
+          <div class="field-title">Confirm Password</div>
+          <input 
+            id="sign-up-password-confirm-input"
+            class="text-field"
+            placeholder="Confirm Password"
+            type="password"
+            value="password"
+          >
+        </div>
+        <div class="spacer"></div>
+        <button class="big-button" id="sign-up-button">Create Account</button>
+      </div>
+
+      <div id="enter-password">
+        <div class="subtitle">Welcome!</div>
+        <div>
+          <input
+            class="text-field"
+            id="enter-email-text-field"
+            placeholder="Password"
+            type="password"
+          >
+        </div>
+        <button class="big-button" id="enter-login-password-button">Login</button>
+      </div>
+
+      <div id="home">
+        <p id="home-desc">You are signed in.</p>
       </div>
     </div>
   </div>

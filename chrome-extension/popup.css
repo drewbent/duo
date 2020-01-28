@@ -1,6 +1,68 @@
 :root {
   --primary-color: #FF7890;
+  --error-color: #f44336;
   --spacing: 12px;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  color: var(--primary-color);
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.spacer {
+  height: var(--spacing);
+}
+
+#loader {
+  visibility: hidden;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 100;
+}
+
+#loader-spinner {
+  visibility: hidden;
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid var(--primary-color); /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 #container {
@@ -8,11 +70,40 @@
   padding: var(--spacing);
 }
 
+#error-flash {
+  background-color: var(--error-color);
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border-radius: 4px;
+  margin-bottom: calc(var(--spacing) * (3/4)); 
+}
+
+#error-flash-text {
+  color: white;
+  font-size: 14px;
+}
+
+#title-bar {
+  position: relative;
+}
+
+#back-button {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: none;
+}
+
 #title {
   font-family: Ruluko;
   font-style: normal;
   font-weight: normal;
-  font-size: 48px;
+  font-size: 40px;
   text-align: center;
   color: var(--primary-color);
   margin-bottom: var(--spacing);
@@ -20,8 +111,13 @@
 
 .subtitle {
   text-align: center;
-  font-size: 19px;
+  font-size: 17px;
   margin-bottom: calc(var(--spacing) * 2);
+}
+
+.field-title {
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 .text-field {
@@ -44,6 +140,7 @@
   color: white;
   width: 100%;
   height: 40px;
+  cursor: pointer;
 }
 
 #profile #signout {
