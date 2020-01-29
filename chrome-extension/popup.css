@@ -70,8 +70,8 @@
   padding: var(--spacing);
 }
 
-#error-flash {
-  background-color: var(--error-color);
+#flash {
+  background-color: black;
   padding-left: 12px;
   padding-right: 12px;
   padding-top: 1px;
@@ -80,7 +80,7 @@
   margin-bottom: calc(var(--spacing) * (3/4)); 
 }
 
-#error-flash-text {
+#flash-text {
   color: white;
   font-size: 14px;
 }

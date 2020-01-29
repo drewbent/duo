@@ -8,8 +8,10 @@ $(document).ready(function() {
         email: $('#enter-email-text-field').val()
       }
     }, data => {
+      console.log(`Verify Email returned: ${JSON.stringify(data)}`)
+      console.log(data)
       if (data.error)
-        return flashError(data.message)
+        return flashError(data.error)
 
       // Otherwise we got a user back; check if they're an admin
       chrome.storage.sync.set({currentLoginData: data})
@@ -53,8 +55,7 @@ $(document).ready(function() {
         if (data.error)
           return flashError(data.message)
 
-        // The data will return the user information
-
+        console.log(data)
       })
     })
   })
@@ -62,20 +63,28 @@ $(document).ready(function() {
 });
 
 const showLoader = () => {
-  console.log('Showing Loader')
   show($('#loader'))
   show($('#loader-spinner'))
 }
 
 const hideLoader = () => {
-  console.log('Hiding loader')
   hide($('#loader'))
   hide($('#loader-spinner'))
 }
 
 const flashError = message => {
-  $('#error-flash-text').text(message)
-  $('#error-flash').show()
+  $('#flash').css('background-color', '#f44336')
+  showFlash(message)
+}
+
+const flashSuccess = message => {
+  $('#flash').css('background-color', '#4caf50')
+  showFlash(message)
+}
+
+const showFlash = message => {
+  $('#flash-text').text(message)
+  $('#flash').show()
 }
 
 const hide = element => {
@@ -86,20 +95,25 @@ const show = element => element.css('visibility', 'visible')
 
 const setInitialUI = () => {
   hideAllPages()
-  chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
-    if (data == null) {
+  chrome.storage.sync.get(['currentUser'], data => {
+    if (data.currentUser == null) {
       showEnterEmail()
     } else {
-      if (data.is_admin || data.signed_up) showEnterPassword(data)
-      else showSignUp()
+      showPage('home')
     }
   })
 }
 
 /** SHOWING PAGES */
 const showEnterEmail = () => {
-  showPage('enter-email')
-  chrome.storage.sync.set({currentLoginData: null, currentUser: null})
+  chrome.storage.sync.set({currentUser: null})
+  chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
+    console.log(JSON.stringify(data))
+    showPage('enter-email', null, null, () => {
+      if (data != null)
+        $('#enter-email-text-field').val(data.email)
+    })
+  })
 }
 
 const showSignUp = () => {
@@ -118,10 +132,7 @@ const showEnterPassword = loginData => {
   )
 }
 
-const showPage = (page, data, backButtonListener) => {
-  hideAllPages()
-  $(`#${page}`).show()
-
+const showPage = (page, data, backButtonListener, onLoad) => {
   // Handle data
   if (data) {
     if (data.subtitle)
@@ -135,6 +146,10 @@ const showPage = (page, data, backButtonListener) => {
   } else {
     backButton.hide()
   }
+
+  hideAllPages()
+  $(`#${page}`).show()
+  onLoad && onLoad()
 }
 
 const hideAllPages = () => {
@@ -144,5 +159,5 @@ const hideAllPages = () => {
   $('#home').hide()
 
   // Also hide the error flash
-  $('#error-flash').hide()
+  $('#flash').hide()
 }

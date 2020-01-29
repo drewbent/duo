@@ -7,14 +7,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { email } = request.payload
     api.get(`/students?email=${email}`)
       .then(data => sendResponse(data))
-      .catch(err => sendResponse(err))
+      .catch(err => sendResponse({error: err.message}))
     return true
   }
 
   if (request.action == 'com.duo.signUp') {
-    const { email, name, password } = request.payload
-    console.log(request.payload)
-    setTimeout(() => sendResponse({}), 1000)
+    // Expects keys 'email', 'name', and 'password'
+    api.post('/users/sign-up', request.payload)
+      .then(data => sendResponse(data))
+      .catch(err => sendResponse(err))
     return true
   }
 
