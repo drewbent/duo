@@ -2,14 +2,15 @@ $(document).ready(function() {
   setInitialUI();
   
   $('#enter-email-button').click(() => {
+    showLoader()
     chrome.runtime.sendMessage({ 
       action: 'com.duo.verifyEmail', 
       payload: {
         email: $('#enter-email-text-field').val()
       }
     }, data => {
-      console.log(`Verify Email returned: ${JSON.stringify(data)}`)
-      console.log(data)
+      hideLoader()
+
       if (data.error)
         return flashError(data.error)
 
@@ -53,9 +54,10 @@ $(document).ready(function() {
         hideLoader()
 
         if (data.error)
-          return flashError(data.message)
-
-        console.log(data)
+          flashError(data.message)
+        else {
+          showEnterEmail(() => flashSuccess('Successfully signed up. Please log in.'))
+        }
       })
     })
   })
@@ -105,13 +107,15 @@ const setInitialUI = () => {
 }
 
 /** SHOWING PAGES */
-const showEnterEmail = () => {
+const showEnterEmail = (cb) => {
   chrome.storage.sync.set({currentUser: null})
   chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
     console.log(JSON.stringify(data))
     showPage('enter-email', null, null, () => {
       if (data != null)
         $('#enter-email-text-field').val(data.email)
+      
+      cb && cb()
     })
   })
 }
