@@ -10,19 +10,28 @@ class DOMParser {
    */
   static getSkillScoreData(newTaskCompletionHTML) {    
 
+    // If unit-block-title does not exist, we are not on the unit page.
+    // Instead, we're on the lessson page and need to adjust our parsing
+    // accordingly.
+    const isLessonView = !($("[data-test-id='unit-block-title']").exists());
+
     const rawScore = DOMParser.getRawTaskScore(newTaskCompletionHTML);
     const questionsCorrect = rawScore.score;
     const questionsOutOf = rawScore.outOf;
 
-    const courseUnitSkillData = DOMParser.getCourseUnitSkill();
+    const courseUnitSkillData = DOMParser.getCourseUnitSkill(isLessonView);
     const skill = courseUnitSkillData.skill;
     const unit = courseUnitSkillData.unit;
     const course = courseUnitSkillData.course;
 
     // Use the variable stored in ContentSession to find the original mastery
     // points. This was parsed earlier on.
-    const masteryPointsStart = ContentSession.masteryPointsStart;
-    const masteryPointsEnd = DOMParser.getSkillMasteryPoints();
+    // Note: there is no way to find the mastery points in the lesson view, so
+    // in this case we just return null.
+    const masteryPointsStart = isLessonView ? 
+      null : ContentSession.masteryPointsStart;
+    const masteryPointsEnd = isLessonView ? 
+      null : DOMParser.getSkillMasteryPoints();
     
     const classSection = 0; // TODO(drew): Make this real
   
@@ -48,10 +57,12 @@ class DOMParser {
    * 
    * This is extracted from an aria label associated with the SVG graphics
    * that represent the mastery points in the DOM.
+   * 
+   * Note: this code only runs on the unit view and should not be run on the
+   * lesson view.
    */
   static getSkillMasteryPoints() {
-    // Determine the current skill name.
-    const skill = $("[data-test-id='modal-title']").text();
+    const skillName = $("[data-test-id='modal-title']").text();
 
     // Identify the masteryPracticeContentItem jQuery object on the page that
     // is associated with the current skill.
@@ -60,7 +71,7 @@ class DOMParser {
         .filter(function() {
           // Exact matches are needed since skill names often have significant
           // overlap with one another.
-          return $(this).text() === skill;
+          return $(this).text() === skillName;
         })
         .parents("[data-test-id='mastery-practice-content-item']")
         .first();
@@ -80,11 +91,41 @@ class DOMParser {
   /**
    * Return the course, unit, and skill associated with the currently active
    * task.
+   * 
+   * @param isLessonView true if the user is in the lesson view; false if the
+   *   user is the normal unit view
    */
-  static getCourseUnitSkill() {
-    const skill = $("[data-test-id='modal-title']").text();
-    const unit = $("[data-test-id='unit-block-title']").text();
-    const course = $("[aria-label='breadcrumbs'] a").text();
+  static getCourseUnitSkill(isLessonView) {
+
+    let skill;
+    let unit;
+    let course;
+
+    if (!isLessonView) {
+      skill = $("[data-test-id='modal-title']").text();
+      unit = $("[data-test-id='unit-block-title']").text();
+      course = $("[aria-label='breadcrumbs'] a").text();
+    }
+
+    if (isLessonView) {
+      // On the lesson view, the course and unit metadata are stored in ld+json
+      const jsonld = JSON.parse(document.querySelector(
+        'script[type="application/ld+json"]').innerText);
+      course = jsonld.itemListElement[1].item.name;
+      unit = jsonld.itemListElement[2].item.name;
+      
+      // The skill name is extracted from the lefthand navigation
+      const ariaCurrent = $(
+        "[aria-label='lesson table of contents'] [aria-current='true']");
+      ariaCurrent.first().find("div").each(function(index) {
+        // One of the divs inside the currently selected element has a title.
+        // Find this one and use it to extract the skill name.
+        const title = $(this).attr("title");
+        if (title) {
+          skill = title.replace("Practice: ", "");
+        }
+      });
+    }
 
     return {
       skill: skill,
@@ -99,7 +140,7 @@ class DOMParser {
    * This must be called when the task was just completed and the popup is
    * still visible.
    * @param newTaskCompletionHTML the jQuery object associated with the task
-   * completion popup
+   *   completion popup
    */
   static getRawTaskScore(newTaskCompletionHTML) {
     const newHTML = newTaskCompletionHTML; // shorter variable name
