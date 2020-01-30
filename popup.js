@@ -175,6 +175,8 @@ const showAdminHome = () => {
       }
     }
   })
+
+  fetchCurrentUser().then(user => $('#admin-home .subtitle').text(user.email))
 }
 
 const showEnterEmail = (cb) => {
