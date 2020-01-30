@@ -25,8 +25,8 @@ $(document).ready(function() {
 
   $('#sign-up-button').click(() => {
     showLoader()
-    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
-      if (!currentLoginData || !currentLoginData.email) {
+    getLoginData().then(loginData => {
+      if (!loginData || !loginData.email) {
         showEnterEmail(() => flashError('Someting went wrong. Please try again.'))
         return
       }
@@ -46,7 +46,7 @@ $(document).ready(function() {
       chrome.runtime.sendMessage({
         action: 'com.duo.signUp',
         payload: {
-          email: currentLoginData.email,
+          email: loginData.email,
           name: `${firstName} ${lastName}`,
           password
         }
@@ -64,8 +64,8 @@ $(document).ready(function() {
 
   $('#enter-password-button').click(() => {
     showLoader()
-    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
-      if (!currentLoginData || !currentLoginData.email) {
+    getLoginData().then(loginData => {
+      if (!loginData || !loginData.email) {
         showEnterEmail(() => flashError('Something went wrong. Please try again.'))
         return
       }
@@ -74,7 +74,7 @@ $(document).ready(function() {
       chrome.runtime.sendMessage({
         action: 'com.duo.login',
         payload: {
-          email: currentLoginData.email,
+          email: loginData.email,
           password,
         }
       }, data => {
@@ -83,7 +83,7 @@ $(document).ready(function() {
         if (data.error)
           flashError(data.error)
         else
-          currentLoginData.is_admin ? showAdminHome() : showHome()
+          loginData.is_admin ? showAdminHome() : showHome()
       })
     })
   })
@@ -97,6 +97,14 @@ const fetchCurrentUser = async() => {
       res(user)
     })
   })
+}
+
+const getLoginData = async() => {
+  return new Promise(res => [
+    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
+      res(currentLoginData)
+    })
+  ])
 }
 
 const logout = () => chrome.runtime.sendMessage({action: 'com.duo.logout'})
@@ -136,10 +144,12 @@ const show = element => element.css('visibility', 'visible')
 const setInitialUI = async () => {
   hideAllPages()
   const user = await fetchCurrentUser()
-  if (user)
-    user.is_admin ? showAdminHome() : showHome()
-  else
+  if (user) {
+    const loginData = await getLoginData()
+    loginData.is_admin ? showAdminHome() : showHome()
+  } else {
     showEnterEmail()
+  }
 }
 
 /** SHOWING PAGES */
