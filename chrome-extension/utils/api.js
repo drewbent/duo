@@ -1,10 +1,10 @@
 const API_URL = 'http://localhost:5000'
 
 function sendReq(path, data) {
+  console.log(`Sending ${data && data.method ? data.method : 'GET'} ${API_URL}${path}`)
   return new Promise((res, rej) => {
     fetch(`${API_URL}${path}`, data)
       .then(response => {
-        console.log(response)
         if (response.ok)
           return response.json()
         else

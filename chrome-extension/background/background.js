@@ -10,7 +10,6 @@ const config = {
   measurementId: "G-S2V90L8JSK"
 };
 const app = firebase.initializeApp(config)
-const auth = firebase.auth()
 
 /**
  * Add callback for completed AJAX requests; to be used by dispatch.js.

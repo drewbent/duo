@@ -34,6 +34,14 @@
   height: var(--spacing);
 }
 
+.v-centered {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 #loader {
   visibility: hidden;
   position: absolute;
@@ -90,11 +98,13 @@
 }
 
 #back-button {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  left: 0;
+  cursor: pointer;
+  display: none;
+}
+
+#title-action-button {
+  right: 0;
   cursor: pointer;
   display: none;
 }

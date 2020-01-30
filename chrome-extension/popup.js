@@ -27,8 +27,8 @@ $(document).ready(function() {
     showLoader()
     chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
       if (!currentLoginData || !currentLoginData.email) {
-        showPage('enter-email')
-        return flashError('Something went wrong. Please try again.')
+        showEnterEmail(() => flashError('Someting went wrong. Please try again.'))
+        return
       }
   
       const firstName = $('#first-name-input').val()
@@ -54,7 +54,7 @@ $(document).ready(function() {
         hideLoader()
 
         if (data.error)
-          flashError(data.message)
+          flashError(data.error)
         else {
           showEnterEmail(() => flashSuccess('Successfully signed up. Please log in.'))
         }
@@ -62,8 +62,46 @@ $(document).ready(function() {
     })
   })
 
+  $('#enter-password-button').click(() => {
+    showLoader()
+    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
+      if (!currentLoginData || !currentLoginData.email) {
+        showEnterEmail(() => flashError('Something went wrong. Please try again.'))
+        return
+      }
+
+      const password = $('#login-password-input').val()
+      chrome.runtime.sendMessage({
+        action: 'com.duo.login',
+        payload: {
+          email: currentLoginData.email,
+          password,
+        }
+      }, data => {
+        hideLoader()
+
+        if (data.error)
+          flashError(data.error)
+        else
+          currentLoginData.is_admin ? showAdminHome() : showHome()
+      })
+    })
+  })
+
 });
 
+/** Utitlies */
+const fetchCurrentUser = async() => {
+  return new Promise(res => {
+    chrome.runtime.sendMessage({action: 'com.duo.fetchCurrentUser'}, user => {
+      res(user)
+    })
+  })
+}
+
+const logout = () => chrome.runtime.sendMessage({action: 'com.duo.logout'})
+
+/** UI ELEMENTS */
 const showLoader = () => {
   show($('#loader'))
   show($('#loader-spinner'))
@@ -95,22 +133,43 @@ const hide = element => {
 
 const show = element => element.css('visibility', 'visible')
 
-const setInitialUI = () => {
+const setInitialUI = async () => {
   hideAllPages()
-  chrome.storage.sync.get(['currentUser'], data => {
-    if (data.currentUser == null) {
-      showEnterEmail()
-    } else {
-      showPage('home')
+  const user = await fetchCurrentUser()
+  if (user)
+    user.is_admin ? showAdminHome() : showHome()
+  else
+    showEnterEmail()
+}
+
+/** SHOWING PAGES */
+const showHome = () => {
+  showPage('home', {
+    action: {
+      icon: 'exit_to_app',
+      onClick: () => {
+        logout()
+        showEnterEmail()
+      }
     }
   })
 }
 
-/** SHOWING PAGES */
+const showAdminHome = () => {
+  showPage('admin-home', {
+    action: {
+      icon: 'exit_to_app',
+      onClick: () => {
+        logout()
+        showEnterEmail()
+      }
+    }
+  })
+}
+
 const showEnterEmail = (cb) => {
   chrome.storage.sync.set({currentUser: null})
   chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
-    console.log(JSON.stringify(data))
     showPage('enter-email', null, null, () => {
       if (data != null)
         $('#enter-email-text-field').val(data.email)
@@ -136,11 +195,34 @@ const showEnterPassword = loginData => {
   )
 }
 
+/**
+ * Can create a right-side bar button item by passing the 'action' key in as data.
+ * Its value should be an object formatted like so:
+ * 
+ * {
+ *  icon: string
+ *  onClick: () => {}
+ * }
+ * 
+ * @param {String} page 
+ * @param {Object} data Takes keys: subtitle, action
+ * @param {Function} backButtonListener 
+ * @param {Function} onLoad 
+ */
 const showPage = (page, data, backButtonListener, onLoad) => {
   // Handle data
+  const actionButton = $('#title-action-button')
+  actionButton.hide()
   if (data) {
     if (data.subtitle)
       $(`#${page} .subtitle`).text(data.subtitle)
+
+    console.log(data.action)
+    if (data.action) {
+      actionButton.show()
+      actionButton.off().click(data.action.onClick)
+      actionButton.text(data.action.icon)
+    }
   }
   
   const backButton = $('#back-button')
@@ -161,6 +243,7 @@ const hideAllPages = () => {
   $('#sign-up').hide()
   $('#enter-password').hide()
   $('#home').hide()
+  $('#admin-home').hide()
 
   // Also hide the error flash
   $('#flash').hide()
