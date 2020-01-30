@@ -15,39 +15,39 @@ $(document).ready(function() {
         return flashError(data.error)
 
       // Otherwise we got a user back; check if they're an admin
+      console.log(`Got user: ${JSON.stringify(data)}`)
       chrome.storage.sync.set({currentLoginData: data})
       if (data.is_admin || data.signed_up)
         showEnterPassword(data)
       else
-        showSignUp()
+        showSignUp(data)
     })
   })
 
   $('#sign-up-button').click(() => {
-    showLoader()
     getLoginData().then(loginData => {
       if (!loginData || !loginData.email) {
         showEnterEmail(() => flashError('Someting went wrong. Please try again.'))
         return
       }
   
-      const firstName = $('#first-name-input').val()
-      if (!firstName) return flashError('You must enter a first name.')
-  
-      const lastName = $('#last-name-input').val()
-      if (!lastName) return flashError('You must enter a last name.')
-  
+      if (!loginData.name) 
+        return flashError('There is no name associated with your account. Please contact your administrator.')
+      
       const password = $('#sign-up-password-input').val()
-      if (!password) return flashError('You must enter a password.')
+      if (!password) 
+        return flashError('You must enter a password.')
   
       const confirmPassword = $('#sign-up-password-confirm-input').val()
-      if (password !== confirmPassword) return flashError('Passwords must match.')
+      if (password !== confirmPassword) 
+        return flashError('Passwords must match.')
   
+      showLoader()
       chrome.runtime.sendMessage({
         action: 'com.duo.signUp',
         payload: {
           email: loginData.email,
-          name: `${firstName} ${lastName}`,
+          name: loginData.name,
           password
         }
       }, data => {
@@ -186,15 +186,15 @@ const showEnterEmail = (cb) => {
       if (data != null)
         $('#enter-email-text-field').val(data.email)
       
-      cb && cb()
+      if (cb) cb()
     })
   })
 }
 
-const showSignUp = () => {
+const showSignUp = loginData => {
   showPage(
     'sign-up',
-    undefined,
+    {subtitle: `Welcome, ${getFirstName(loginData.name)}! Please create a password.`},
     showEnterEmail
   )
 }
@@ -202,7 +202,7 @@ const showSignUp = () => {
 const showEnterPassword = loginData => {
   showPage(
     'enter-password', 
-    {subtitle: `Welcome${loginData.is_admin ? ', admin' : ''}! Please enter your password.`}, 
+    {subtitle: `Welcome, ${loginData.is_admin ? 'Admin' : getFirstName(loginData.name)}! Please enter your password.`}, 
     showEnterEmail
   )
 }

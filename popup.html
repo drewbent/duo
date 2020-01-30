@@ -6,7 +6,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="popup.css">
 
+    <!-- Utils -->
     <script src="thirdParty/jquery-3.3.1.min.js"></script>
+    <script src="popup-utils/str-utils.js"></script>
+
     <script src="popup.js"></script>
   </head>
   <body>
@@ -38,27 +41,7 @@
       </div>
 
       <div id="sign-up">
-        <div class="subtitle">Please create your account.</div>
-        <div>
-          <div class="field-title">First Name</div>
-          <input
-            id="first-name-input"
-            class="text-field" 
-            placeholder="Johnny"
-            type="text"
-            value="Johnny"
-          >
-        </div>
-        <div>
-          <div class="field-title">Last Name</div>
-          <input 
-            id="last-name-input"
-            class="text-field" 
-            placeholder="Appleseed"
-            type="text"
-            value="Appleseed"
-          >
-        </div>
+        <div class="subtitle"></div>
         <div>
           <div class="field-title">Password</div>
           <input 
