@@ -1,0 +1,41 @@
+#duo-teacher-dashboard-popup-student-list {
+  background-color: #efefef;
+  border-radius: 4px;
+  padding: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#duo-teacher-dashboard-students-title-bar {
+  overflow: auto;
+}
+
+#duo-teacher-dashboard-students-title {
+  float: left;
+}
+
+#duo-teacher-dashboard-students-error-icon {
+  float: right;
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.duo-teacher-dashboard-student-li {
+  border-top-width: 1px;
+  border-color: lightgray;
+  border-style: solid;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  position: relative;
+}
+
+.duo-teacher-dashboard-student-error-icon {
+  font-size: 10px;
+  top: 6px;
+  right: 0;
+  position: absolute;
+}
+
+.duo-teacher-dashboard-student-email {
+  font-style: italic;
+}

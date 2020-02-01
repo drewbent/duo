@@ -1,3 +1,9 @@
+:root {
+  --primary-color: #FF7890;
+  --error-color: #f44336;
+  --spacing: 8px;
+}
+
 .action-popup {
   position: absolute;
   right: 28px !important;
@@ -6,4 +12,47 @@
   border-radius: 4px;
   padding: 12px;
   background-color: white;
+}
+
+.duo-popup-title {
+  font-size: 19px;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: var(--spacing);
+}
+
+.duo-popup-subtitle {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: var(--spacing);
+}
+
+.duo-popup-heading {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.duo-flash {
+  padding-left: var(--spacing);
+  padding-right: var(--spacing);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 4px;
+  background-color: var(--error-color);
+  margin-bottom: var(--spacing);
+  color: white;
+  display: none;
+}
+
+.big-button {
+  min-width: 200px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  min-height: 32px;
+  font-size: 15px;
 }

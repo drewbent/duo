@@ -1,16 +1,16 @@
 /**
- * @fileoverview Listen for auth events sent from the popup, and act on them.
+ * @fileoverview For managing auth
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action == 'com.duo.verifyEmail') {
+  if (request.action === 'com.duo.verifyEmail') {
     const { email } = request.payload
     api.get(`/students?email=${email}`)
-      .then(data => sendResponse(data))
+      .then(sendResponse)
       .catch(err => sendResponse({error: err.message}))
     return true
   }
 
-  if (request.action == 'com.duo.signUp') {
+  if (request.action === 'com.duo.signUp') {
     // Expects keys 'email', 'name', and 'password'
     api.post('/users/sign-up', request.payload)
       .then(data => sendResponse(data))
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   }
 
-  if (request.action == 'com.duo.login') {
+  if (request.action === 'com.duo.login') {
     const { email, password } = request.payload
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   }
 
-  if (request.action == 'com.duo.logout') {
+  if (request.action === 'com.duo.logout') {
     firebase.auth().signOut()
       .then(() => {
         updateTeacherDashboardPopup()
@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   }
 
-  if (request.action == 'com.duo.fetchCurrentUser') {
+  if (request.action === 'com.duo.fetchCurrentUser') {
     getCurrentUser().then(sendResponse)
     return true
   }

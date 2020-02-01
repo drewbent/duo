@@ -31,8 +31,10 @@ function sendAuthReq(path, data, idToken) {
           console.log(`${reqDesc} SUCCESS`)
           return response.json()
         } else {
-          console.log(`${reqDesc} FAILED: ${response.statusText}`)
-          throw new Error(response.statusText)
+          // Failures are automatically logged
+          const error = new Error(response.statusText)
+          error.name = response.status
+          throw error
         }
       })
       .then(res)

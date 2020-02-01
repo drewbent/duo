@@ -1,4 +1,11 @@
 /**
+ * @fileoverview Helpers for executing content scripts from background scripts.
+ * 
+ * TODO: Make sure some scripts aren't loaded on the same tab multiple times?
+ */
+
+
+/**
  * Loads content script dependencies for this tab (if needed), then executes the
  * provided content script.
  * 
@@ -12,22 +19,16 @@ function executeScript(tabId, file, cb) {
 // PRIVATE
 const _dependencies = [
   'thirdParty/jquery-3.3.1.min.js',
-  'content/scripts/content-utils.js',
+  'content/scripts/flash-helpers.js',
+  'content/scripts/content-helpers.js',
 ]
-
-/** Mapping of tabId => boolean; check if content script dependencies loaded */
-const _depsLoadedForTab = {}
 
 // Loads scripts that content scripts depend on
 function _loadDependencies(tabId, cb) {
-  if (!_depsLoadedForTab[tabId]) {
-    _depsLoadedForTab[tabId] = true
-    _executeMultipleScripts(tabId, _dependencies, () => {
-      console.log(`Tab ${tabId}: Loaded content script dependencies`)
-    })
-  } else {
+  _executeMultipleScripts(tabId, _dependencies, () => {
+    console.log(`Tab ${tabId}: Loaded content script dependencies`)
     cb()
-  }
+  })
 }
 
 function _executeMultipleScripts(tabId, files, cb) {

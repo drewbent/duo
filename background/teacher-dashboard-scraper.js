@@ -7,7 +7,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 // PUBLIC METHODS
 function updateTeacherDashboardPopup() {
   chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-    console.log(tabs)
     if (tabs.length === 0)
       return
 
@@ -28,12 +27,13 @@ function _updatePopup(tabId, tabUrl) {
           _hidePopup(tabId)
       })
     } else {
-
+      _hidePopup(tabId)
     }
 }
 
 function _showPopup(tabId) {
   chrome.tabs.insertCSS(tabId, { file: 'content/styles/content.css' })
+  chrome.tabs.insertCSS(tabId, { file: 'content/styles/teacher-dashboard-popup.css' })
   executeScript(tabId, 'content/scripts/show-teacher-dashboard-popup.js')
 }
 

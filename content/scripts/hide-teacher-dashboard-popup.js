@@ -1,5 +1,4 @@
-$(document).ready(() => {
-  const popup = $('#duo-teacher-dashboard-scraper-popup')
-  if (!popup) return // Already hidden
+if ($('#duo-teacher-dashboard-scraper-popup').length !== 0) {
+  console.log('Duo: Hiding teacher dashboard popup.')
   popup.remove()
-})
+}
