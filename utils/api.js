@@ -1,14 +1,44 @@
 const API_URL = 'http://localhost:5000'
 
+let idToken = null // Cached ID token
+
 function sendReq(path, data) {
-  console.log(`Sending ${data && data.method ? data.method : 'GET'} ${API_URL}${path}`)
   return new Promise((res, rej) => {
-    fetch(`${API_URL}${path}`, data)
+    firebase.auth().onAuthStateChanged(user => {
+      if (user == null) 
+        sendAuthReq(path, data, null)
+      else {
+        user.getIdToken()
+          .then(token => {
+            sendAuthReq(path, data, token)
+              .then(res)
+              .catch(rej)
+          })
+          .catch(rej)
+      }
+    })
+  })
+}
+
+function sendAuthReq(path, data, idToken) {
+  const reqDesc = `${data && data.method ? data.method : 'GET'} ${API_URL}${path}`
+  console.log(`Sending ${reqDesc}`)
+  let reqData = data || {}
+  reqData.headers = {'Content-Type': 'application/json'}
+  if (idToken)
+    reqData.headers.Authorization = `Bearer ${idToken}`
+
+
+  return new Promise((res, rej) => {
+    fetch(`${API_URL}${path}`, reqData)
       .then(response => {
-        if (response.ok)
+        if (response.ok) {
+          console.log(`${reqDesc} SUCCESS`)
           return response.json()
-        else
+        } else {
+          console.log(`${reqDesc} FAILED: ${response.statusText}`)
           throw new Error(response.statusText)
+        }
       })
       .then(json => res(json))
       .catch(err => rej(err))
