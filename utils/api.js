@@ -4,7 +4,7 @@ function sendReq(path, data) {
   return new Promise((res, rej) => {
     firebase.auth().onAuthStateChanged(user => {
       if (user == null) 
-        sendAuthReq(path, data, null).then(res).catch(err)
+        sendAuthReq(path, data, null).then(res).catch(rej)
       else {
         user.getIdToken()
           .then(token => {
@@ -35,7 +35,7 @@ function sendAuthReq(path, data, idToken) {
           throw new Error(response.statusText)
         }
       })
-      .then(json => { console.log(json); res(json) })
+      .then(res)
       .catch(rej)
   })
 }
