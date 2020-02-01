@@ -1,18 +1,14 @@
 const API_URL = 'http://localhost:5000'
 
-let idToken = null // Cached ID token
-
 function sendReq(path, data) {
   return new Promise((res, rej) => {
     firebase.auth().onAuthStateChanged(user => {
       if (user == null) 
-        sendAuthReq(path, data, null)
+        sendAuthReq(path, data, null).then(res).catch(err)
       else {
         user.getIdToken()
           .then(token => {
-            sendAuthReq(path, data, token)
-              .then(res)
-              .catch(rej)
+            sendAuthReq(path, data, token).then(res).catch(rej)
           })
           .catch(rej)
       }
@@ -28,7 +24,6 @@ function sendAuthReq(path, data, idToken) {
   if (idToken)
     reqData.headers.Authorization = `Bearer ${idToken}`
 
-
   return new Promise((res, rej) => {
     fetch(`${API_URL}${path}`, reqData)
       .then(response => {
@@ -40,8 +35,8 @@ function sendAuthReq(path, data, idToken) {
           throw new Error(response.statusText)
         }
       })
-      .then(json => res(json))
-      .catch(err => rej(err))
+      .then(json => { console.log(json); res(json) })
+      .catch(rej)
   })
 }
 

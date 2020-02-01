@@ -9,6 +9,7 @@ $(document).ready(function() {
         email: $('#enter-email-text-field').val()
       }
     }, data => {
+      console.log(data)
       hideLoader()
 
       if (data.error)
@@ -91,19 +92,17 @@ $(document).ready(function() {
 });
 
 /** Utitlies */
-const fetchCurrentUser = async() => {
+const fetchCurrentUser = () => {
   return new Promise(res => {
-    chrome.runtime.sendMessage({action: 'com.duo.fetchCurrentUser'}, user => {
-      res(user)
-    })
+    chrome.runtime.sendMessage({action: 'com.duo.fetchCurrentUser'}, res)
   })
 }
 
-const getLoginData = async() => {
+const getLoginData = () => {
   return new Promise(res => [
-    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
+    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) =>
       res(currentLoginData)
-    })
+    )
   ])
 }
 
@@ -180,7 +179,6 @@ const showAdminHome = () => {
 }
 
 const showEnterEmail = (cb) => {
-  chrome.storage.sync.set({currentUser: null})
   chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
     showPage('enter-email', null, null, () => {
       if (data != null)

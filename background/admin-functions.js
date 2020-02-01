@@ -1,8 +1,8 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'com.duo.test') {
     api.get('/users')
-      .then(() => sendResponse(data))
-      .catch(err => sendResponse({ error: err.message }))
+      .then(data => sendResponse(data))
+      .catch(err => { console.log(err); sendResponse({ error: err.message }) })
     return true
   }
 })

@@ -27,18 +27,6 @@
 				"ui.js",
 				"duo-api.js"
 			]
-		},
-		{
-			"matches": ["https://*.khanacademy.org/coach/class/*/progress/unit-mastery/subject/*"],
-			"css": [
-				"content/styles/content.css",
-				"content/styles/teacher-dashboard-scraper.css"
-			],
-			"js": [
-				"utils/api.js",
-				"thirdParty/jquery-3.3.1.min.js",
-				"content/scripts/teacher-dashboard-scraper.js"
-			]
 		}
 	],
 	"content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://apis.google.com; object-src 'self';",

@@ -48,7 +48,7 @@ const newTabURL = function(tabId, url) {
 	matching_regex = RegExp(".*\:\/\/.*khanacademy\.org.*");
 	if (matching_regex.test(url)) {
 		chrome.pageAction.setIcon({
-			tabId: tabId,
+			tabId,
 			path: {
 				"16": "images/icon16.png",
 				"48": "images/icon48.png",
@@ -58,7 +58,7 @@ const newTabURL = function(tabId, url) {
 		}, () => {})
 	} else if (url) {
 		chrome.pageAction.setIcon({
-			tabId: tabId,
+			tabId,
 			path: {
 				"16": "images/icon16-dimmed.png",
 				"48": "images/icon48-dimmed.png",
@@ -71,6 +71,8 @@ const newTabURL = function(tabId, url) {
 
 // Listen for the url to change on the current tab.
 chrome.tabs.onUpdated.addListener(function(tabId, _, tab) {
+	// Teacher dashboard scraper popup?
+	executeScript(tabId, 'content/scripts/teacher-dashboard-scraper.js')
 	newTabURL(tabId, tab.url);
 });
 
