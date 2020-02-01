@@ -70,10 +70,8 @@ const newTabURL = function(tabId, url) {
 };
 
 // Listen for the url to change on the current tab.
-chrome.tabs.onUpdated.addListener(function(tabId, _, tab) {
-	// Teacher dashboard scraper popup?
-	executeScript(tabId, 'content/scripts/teacher-dashboard-scraper.js')
-	newTabURL(tabId, tab.url);
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	newTabURL(tabId, changeInfo.url);
 });
 
 // Listen for new tabs to be selected.

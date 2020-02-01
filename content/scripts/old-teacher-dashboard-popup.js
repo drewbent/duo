@@ -1,21 +1,13 @@
-console.log('FIRING')
-
 $(document).ready(() => {
-  // Inject sync popup
-  chrome.runtime.onMessage.addListener(message => {
-    console.log(message)
-  })
+  updatePopup()
 })
 
-/**
- * Reference to the popup element; 
- */
-let popup = null
+const getPopup = () => $('#duo-teacher-dashboard-scraper-popup')
 
 /**
  * Shows/hides the popup based on current state
  */
-function showHidePopup() {
+function updatePopup() {
   console.log('Show hide popup')
   fetchCurrentUser().then(user => {
     if (user == null) return hidePopup()
@@ -30,10 +22,8 @@ function showHidePopup() {
 }
 
 function hidePopup() {
-  if (popup) {
-    popup.remove()
-    popup = null
-  }
+  const popup = getPopup()
+  if (popup) popup.remove()
 }
 
 function showPopup() {

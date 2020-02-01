@@ -49,7 +49,8 @@
 		"images/*",
 		"templates/*",
 		"thirdParty/fonts/*",
-		"content/html/*"
+		"content/html/*",
+		"content/css/*"
 	],
 	"manifest_version": 2
 }
