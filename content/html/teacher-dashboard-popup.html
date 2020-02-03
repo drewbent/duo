@@ -1,50 +1,28 @@
 <!DOCTYPE html>
 
-<div id="duo-teacher-dashboard-scraper-popup" class="action-popup">
+<div id="duo-tdp-container" class="action-popup">
   <div class='duo-flash'></div>
   <div class='duo-popup-title'>
     Duo Admin
   </div>
   <div class='duo-popup-subtitle'></div>
-  <div id="duo-teacher-dashboard-popup-student-list">
-    <div id='duo-teacher-dashboard-students-title-bar'>
+  <div id="duo-tdp-stu-list-container" class='margin-b-std'>
+    <div id='duo-tdp-stu-title-bar'>
       <div id='duo-teacher-dashboard-students-title' class='duo-popup-heading'>
         Students
       </div>
-      <div id='duo-teacher-dashboard-students-error-icon'>
-        ❌
+      <div id='duo-tdp-stu-list-expand-icon'>
+        🔽
       </div>
     </div>
-    <ul>
-      <li class='duo-teacher-dashboard-student-li'>
-          <div>
-            Student 1
-          </div>
-          <div class='duo-teacher-dashboard-student-error-icon'>
-            ❌  
-          </div>
-          <div class='duo-teacher-dashboard-student-email'>
-            Email 1
-          </div>
-      </li>
-      <li class='duo-teacher-dashboard-student-li'>
-        <div>
-          Student 2
-        </div>
-        <div class='duo-teacher-dashboard-student-error-icon'>
-          ❌  
-        </div>
-        <div class='duo-teacher-dashboard-student-email'>
-          Email 2
-        </div>
-      </li>
-    </ul>
+    <ul id='duo-tdp-stu-list'></ul>
   </div>
-  <!--
   <div id='duo-teacher-dashboard-popup-buttons'>
-    <button id='#sync-class-data-button' class='big-button'>
-      Sync Class Data
+    <button id='duo-identify-students-button' class='big-button margin-b-std'>
+      Identify Students
+    </button>
+    <button id='duo-tdp-scrape-button' class='big-button'>
+      Scrape Skill Data
     </button>
   </div>
-  -->
 </div>

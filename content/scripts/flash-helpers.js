@@ -32,11 +32,3 @@ function hideFlash(container) {
   if (flash.length === 0) return
   hide(flash)
 }
-
-function hide(element) {
-  element.css('display', 'none')
-}
-
-function show(element) {
-  element.css('display', 'block')
-}

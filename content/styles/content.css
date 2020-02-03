@@ -4,6 +4,19 @@
   --spacing: 8px;
 }
 
+.margin-b-std {
+  margin-bottom: var(--spacing);
+}
+
+.italic {
+  font-style: italic;
+}
+
+.error-text {
+  color: var(--error-color);
+  font-style: italic;
+}
+
 .action-popup {
   position: absolute;
   right: 28px !important;
@@ -36,13 +49,14 @@
 .duo-flash {
   padding-left: var(--spacing);
   padding-right: var(--spacing);
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   border-radius: 4px;
   background-color: var(--error-color);
   margin-bottom: var(--spacing);
   color: white;
   display: none;
+  max-width: 220px;
 }
 
 .big-button {
@@ -55,4 +69,5 @@
   border-radius: 4px;
   min-height: 32px;
   font-size: 15px;
+  display: block;
 }

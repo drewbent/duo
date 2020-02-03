@@ -7,3 +7,19 @@
 function setSubtitle(container, subtitle) {
   container.find('.duo-popup-subtitle').text(subtitle)
 }
+
+function isHidden(element) {
+  return element.css('display') === 'none'
+}
+
+function hide(element) {
+  element.css('display', 'none')
+}
+
+function show(element) {
+  element.css('display', 'block')
+}
+
+function sendMessage(action, payload, cb) {
+  chrome.runtime.sendMessage({ action, payload }, cb)
+}

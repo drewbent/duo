@@ -1,41 +1,57 @@
-#duo-teacher-dashboard-popup-student-list {
+#duo-tdp-stu-list-container {
   background-color: #efefef;
   border-radius: 4px;
   padding: 8px;
   padding-top: 4px;
   padding-bottom: 4px;
+  display: none;
+  margin-bottom: 12px;
+  max-height: 40vh;
+  overflow: auto;
+  border: 1px solid gray;
 }
 
-#duo-teacher-dashboard-students-title-bar {
+#duo-tdp-stu-list-container::-webkit-scrollbar {
+  display: none;
+}
+
+#duo-tdp-stu-title-bar {
   overflow: auto;
+  cursor: pointer;
 }
 
 #duo-teacher-dashboard-students-title {
   float: left;
 }
 
-#duo-teacher-dashboard-students-error-icon {
+#duo-tdp-stu-list-expand-icon {
   float: right;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 4px;
+  display: none;
 }
 
-.duo-teacher-dashboard-student-li {
+.duo-tdp-student-li {
   border-top-width: 1px;
   border-color: lightgray;
   border-style: solid;
   padding-top: 2px;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
   position: relative;
 }
 
+.duo-tdp-student-email {
+  font-size: 13px;
+  font-style: italic;
+}
+
 .duo-teacher-dashboard-student-error-icon {
-  font-size: 10px;
+  font-size: 15px;
   top: 6px;
   right: 0;
   position: absolute;
 }
 
-.duo-teacher-dashboard-student-email {
-  font-style: italic;
+#duo-teacher-dashboard-popup-buttons {
+  display: none;
 }

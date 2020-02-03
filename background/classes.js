@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { kaId } = request.payload
     api.get(`/classes?ka_id=${kaId}`)
       .then(sendResponse)
-      .catch(err => { console.log(err); sendResponse({error: err.message, status: err.name}) })
+      .catch(sendErrorResponse(sendResponse))
     return true
   }
 })

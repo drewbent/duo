@@ -19,8 +19,8 @@ function executeScript(tabId, file, cb) {
 // PRIVATE
 const _dependencies = [
   'thirdParty/jquery-3.3.1.min.js',
-  'content/scripts/flash-helpers.js',
   'content/scripts/content-helpers.js',
+  'content/scripts/flash-helpers.js',
 ]
 
 // Loads scripts that content scripts depend on
