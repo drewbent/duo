@@ -6,15 +6,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { email } = request.payload
     api.get(`/students?email=${email}`)
       .then(sendResponse)
-      .catch(err => sendResponse({error: err.message}))
+      .catch(sendErrorResponse(sendResponse))
     return true
   }
 
   if (request.action === 'com.duo.signUp') {
     // Expects keys 'email', 'name', and 'password'
-    api.post('/users/sign-up', request.payload)
-      .then(data => sendResponse(data))
-      .catch(err => sendResponse({error: err.message}))
+    const { id, email, password } = request.payload
+    api.post(`/students/${id}/sign-up`, { email, password })
+      .then(sendResponse)
+      .catch(sendErrorResponse(sendResponse))
     return true
   }
 
@@ -35,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         updateTeacherDashboardPopup()
         sendResponse()
       })
-      .catch(err => sendResponse({error: err.message}))
+      .catch(sendErrorResponse(sendResponse))
     return true
   }
 
@@ -48,7 +49,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const fetchAllCurrentUserData = async() => {
   const values = await Promise.all([
     getCurrentUser(),
-    getCurrentLoginData()
+    getDuoUserData()
   ])
   return { user: values[0], loginData: values[1] }
 }
@@ -57,8 +58,8 @@ const getCurrentUser = async() => (
   new Promise(res => firebase.auth().onAuthStateChanged(res))
 )
 
-const getCurrentLoginData = async() => (
-  new Promise(res => chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) => {
-    res(currentLoginData)
+const getDuoUserData = async() => (
+  new Promise(res => chrome.storage.sync.get(['duoUserData'], ({ duoUserData }) => {
+    res(duoUserData)
   }))
 )

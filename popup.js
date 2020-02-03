@@ -9,7 +9,6 @@ $(document).ready(function() {
         email: $('#enter-email-text-field').val()
       }
     }, data => {
-      console.log(data)
       hideLoader()
 
       if (data.error)
@@ -17,7 +16,7 @@ $(document).ready(function() {
 
       // Otherwise we got a user back; check if they're an admin
       console.log(`Got user: ${JSON.stringify(data)}`)
-      chrome.storage.sync.set({currentLoginData: data})
+      chrome.storage.sync.set({duoUserData: data})
       if (data.is_admin || data.signed_up)
         showEnterPassword(data)
       else
@@ -26,13 +25,13 @@ $(document).ready(function() {
   })
 
   $('#sign-up-button').click(() => {
-    getLoginData().then(loginData => {
-      if (!loginData || !loginData.email) {
+    getDuoUserData().then(duoUserData => {
+      if (!duoUserData || !duoUserData.email) {
         showEnterEmail(() => flashError('Someting went wrong. Please try again.'))
         return
       }
   
-      if (!loginData.name) 
+      if (!duoUserData.name) 
         return flashError('There is no name associated with your account. Please contact your administrator.')
       
       const password = $('#sign-up-password-input').val()
@@ -47,8 +46,8 @@ $(document).ready(function() {
       chrome.runtime.sendMessage({
         action: 'com.duo.signUp',
         payload: {
-          email: loginData.email,
-          name: loginData.name,
+          id: duoUserData.id,
+          email: duoUserData.email,
           password
         }
       }, data => {
@@ -65,7 +64,7 @@ $(document).ready(function() {
 
   $('#enter-password-button').click(() => {
     showLoader()
-    getLoginData().then(loginData => {
+    getDuoUserData().then(loginData => {
       if (!loginData || !loginData.email) {
         showEnterEmail(() => flashError('Something went wrong. Please try again.'))
         return
@@ -98,10 +97,10 @@ const fetchCurrentUser = () => {
   })
 }
 
-const getLoginData = () => {
+const getDuoUserData = () => {
   return new Promise(res => [
-    chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData }) =>
-      res(currentLoginData)
+    chrome.storage.sync.get(['duoUserData'], ({ duoUserData }) =>
+      res(duoUserData)
     )
   ])
 }
@@ -144,8 +143,9 @@ const setInitialUI = async () => {
   hideAllPages()
   const user = await fetchCurrentUser()
   if (user) {
-    const loginData = await getLoginData()
-    loginData.is_admin ? showAdminHome() : showHome()
+    const data = await getDuoUserData()
+    if (!data) return showEnterEmail()
+    data.is_admin ? showAdminHome() : showHome()
   } else {
     showEnterEmail()
   }
@@ -179,7 +179,7 @@ const showAdminHome = () => {
 }
 
 const showEnterEmail = (cb) => {
-  chrome.storage.sync.get(['currentLoginData'], ({ currentLoginData: data }) => {
+  chrome.storage.sync.get(['duoUserData'], ({ duoUserData: data }) => {
     showPage('enter-email', null, null, () => {
       if (data != null)
         $('#enter-email-text-field').val(data.email)

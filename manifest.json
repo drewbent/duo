@@ -13,6 +13,7 @@
 		"storage"
 	],
 	"background": {
+		"matches": ["https://*.khanacademy.org/*"],
 		"page": "background.html",
 		"persistent": true
 	},
