@@ -21,12 +21,11 @@
 		{
 			"matches": ["https://*.khanacademy.org/*"],
 			"css": ["styles.css"],
-			"js": ["thirdParty/handlebars.min.js", "thirdParty/jquery-3.3.1.min.js",
-				"content-script.js",
-				"dispatch.js",
-				"dom-parser.js",
-				"ui.js",
-				"duo-api.js"
+			"js": [
+				"thirdParty/handlebars.min.js", 
+				"thirdParty/jquery-3.3.1.min.js",
+				"content/scripts/content-helpers.js",
+				"content/scripts/scrape-unit-view-task.js"
 			]
 		}
 	],
@@ -35,7 +34,7 @@
 		"default_popup": "popup.html",
 		"default_icon": {
 			"16": "images/icon16-dimmed.png",
-      "48": "images/icon48-dimmed.png",
+      		"48": "images/icon48-dimmed.png",
 			"128": "images/icon128-dimmed.png",
 			"512": "images/icon512-dimmed.png"  
 		}

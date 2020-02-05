@@ -4,7 +4,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     _updatePopup(tabId, changeInfo.url || tab.url)
 });
 
-// PUBLIC METHODS
+/**
+ * PUBLIC METHODS
+ * ===============
+ */
 function updateTeacherDashboardPopup() {
   chrome.tabs.query({active: true, currentWindow: true}, tabs => {
     if (tabs.length === 0)
@@ -15,7 +18,10 @@ function updateTeacherDashboardPopup() {
   })
 }
 
-// PRIVATE METHODS
+/**
+ * PRIVATE METHODS
+ * ==============
+ */
 function _updatePopup(tabId, tabUrl) {
   const regex = RegExp('.*\:\/\/.*khanacademy\.org/coach/class/.+/progress/unit-mastery/subject/.+/unit/.+')
     if (regex.test(tabUrl)) {
