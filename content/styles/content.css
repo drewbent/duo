@@ -17,14 +17,24 @@
   font-style: italic;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.text-normal-size {
+  font-size: 15px;
+}
+
 .action-popup {
-  position: absolute;
+  position: fixed;
   right: 28px !important;
   top: 80px !important;
   box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.2);
   border-radius: 4px;
   padding: 12px;
   background-color: white;
+  max-width: 240px;
+  z-index: 1000000000;
 }
 
 .duo-popup-title {
@@ -38,6 +48,13 @@
   text-align: center;
   font-size: 15px;
   margin-bottom: var(--spacing);
+}
+
+.duo-popup-close-button {
+  position: absolute;
+  right: 12px;
+  top: 16px;
+  cursor: pointer;
 }
 
 .duo-popup-heading {
@@ -57,6 +74,17 @@
   color: white;
   display: none;
   max-width: 220px;
+}
+
+.duo-text-field {
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  width: calc(100% - 16px);
+  height: 32px;
+  font-size: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-bottom: calc(var(--spacing) * 1)
 }
 
 .big-button {

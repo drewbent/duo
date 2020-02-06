@@ -3,40 +3,42 @@
  * view task completions.
  */
 
-const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-        if (mutation.addedNodes.length == 0) return
-
-        const html = $(mutation.addedNodes[0].outerHTML)
-        if (!_containsSkillCompletion(html)) return
-
-        // We don't care if these fail
-        try {
-            const data = {
-                ..._scrapeQuestionData(html),
-                course: _scrapeCourse(),
-                unit: _scrapeUnit(),
-                skill: _scrapeSkill(),
-                recorded_from: 'unit_view',
+ $(document).ready(() => {
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.addedNodes.length == 0) return
+    
+            const html = $(mutation.addedNodes[0].outerHTML)
+            if (!_containsSkillCompletion(html)) return
+    
+            // We don't care if these fail
+            try {
+                const data = {
+                    ..._scrapeQuestionData(html),
+                    course: _scrapeCourse(),
+                    unit: _scrapeUnit(),
+                    skill: _scrapeSkill(),
+                    recorded_from: 'unit_view',
+                }
+                
+                sendMessage('com.duo.uploadSkillCompletion', { data }, response => {
+                    if (response.error) console.log(response.error)
+                    else console.log('Successfully uploaded skill completion.')
+                })
             }
-            
-            sendMessage('com.duo.uploadSkillCompletion', { data }, response => {
-                if (response.error) console.log(response.error)
-                else console.log('Successfully uploaded skill completion.')
-            })
-        }
-        catch(err) {
-            console.log('Failed to scrape question data: ' + err.message)
-        }
+            catch(err) {
+                console.log('Failed to scrape question data: ' + err.message)
+            }
+        })
     })
-})
-
-const observerConfig = {
-    childList: true,
-    subtree: true,
-}
-
-observer.observe(document.body, observerConfig)
+    
+    const observerConfig = {
+        childList: true,
+        subtree: true,
+    }
+    
+    observer.observe(document.body, observerConfig)
+ })
 
 /**
  * PRIVATE METHODS

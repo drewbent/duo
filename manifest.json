@@ -20,12 +20,14 @@
 	"content_scripts": [
 		{
 			"matches": ["https://*.khanacademy.org/*"],
-			"css": ["styles.css"],
+			"css": ["styles.css", "content/styles/content.css"],
 			"js": [
 				"thirdParty/handlebars.min.js", 
 				"thirdParty/jquery-3.3.1.min.js",
 				"content/scripts/content-helpers.js",
-				"content/scripts/scrape-unit-view-task.js"
+				"content/scripts/flash-helpers.js",
+				"content/scripts/scrape-unit-view-task.js",
+				"content/scripts/struggling-detector.js"
 			]
 		}
 	],
