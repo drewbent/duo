@@ -1,8 +1,9 @@
 var strugglingPopupInjected = false
-var stugglingPopupVisible = false
+var strugglingPopupVisible = false
 
 /**
- * @fileoverview This will observe DOM changes and check if the student is struggling
+ * @fileoverview This will observe DOM changes and check if the student is struggling.
+ * It works in both the lesson view and the unit view.
  */
 $(document).ready(() => {
     let incorrectStreak = 0
@@ -31,13 +32,13 @@ $(document).ready(() => {
             // Student is struggling
             console.log('Student is struggling')
 
-            const skill = _scrapeSkill()
+            const skill = scrapeTaskSkill()
             if (skill == null)
                 return console.log('Failed to scrape skill info :(')
             
             sendMessage('com.duo.findGuides', { skill }, data => {
                 if (data.error)
-                    return console.log(data.error)
+                return console.log(data.error)
 
                 incorrectStreak = 0
                 const guideNames = data.map(g => g.name)
@@ -134,8 +135,4 @@ function _containsIncorrectAlert(html) {
 function _containsCorrectAlert(html) {
     const query = 'img[src="https://cdn.kastatic.org/images/exercise-correct.svg"]'
     return html.find(query).length > 0
-}
-
-function _scrapeSkill() {
-    return $('[data-test-id="modal-title"]').text()
 }

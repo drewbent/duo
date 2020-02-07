@@ -10,15 +10,15 @@
     
             const html = $(mutation.addedNodes[0].outerHTML)
             if (!_containsSkillCompletion(html)) return
-    
+
             // We don't care if these fail
             try {
                 const data = {
                     ..._scrapeQuestionData(html),
-                    course: _scrapeCourse(),
-                    unit: _scrapeUnit(),
-                    skill: _scrapeSkill(),
-                    recorded_from: 'unit_view',
+                    course: _scrapeTaskCourse(isUnitView),
+                    unit: _scrapeTaskUnit(isUnitView),
+                    skill: scrapeTaskSkill(isUnitView),
+                    recorded_from: isUnitView() ? 'unit_view_task' : 'lesson_view_task',
                 }
                 
                 sendMessage('com.duo.uploadSkillCompletion', { data }, response => {
@@ -39,6 +39,31 @@
     
     observer.observe(document.body, observerConfig)
  })
+
+ /**
+  * PUBLIC METHODS
+  * ==============
+  */
+function isUnitView() {
+    const url = window.location.href
+    return url.endsWith('?modal=1')
+}
+ 
+/**
+ * @param {Boolean} isUnitView Whether or not we're scraping from the unit view
+ * @returns A string containing the skill name. If none is found, throws an error.
+ */
+function scrapeTaskSkill() {
+    if (isUnitView()) {
+        const text = $('[data-test-id="modal-title"]').text()
+        if (text && text.length !== 0) return text
+        else throw new Error('Failed to find skill name.')
+    } else {
+        // It's in the first h1
+        const header = $('h1').first()
+        return header.text()
+    }
+}
 
 /**
  * PRIVATE METHODS
@@ -80,29 +105,40 @@ function _scrapeQuestionData(html) {
 }
 
 /**
- * @param {JQuery Element} html The JQuery element of the html to scrape within
  * @returns A string containing the course name. If none is found returns null.
  */
-function _scrapeCourse() {
-    // Don't need this, so ignoring for now. I found the attr selector from dom-parser
-    // '[aria-label='breadcrumbs'] a' would get the unit name instead of the course name.
-    return null
+function _scrapeTaskCourse() {
+    if (isUnitView()) {
+        // Don't need this, so ignoring for now. I found the attr selector from dom-parser
+        // '[aria-label='breadcrumbs'] a' would get the unit name instead of the course name.
+        return null
+    } else {
+        const json = _scrapeLdInfo()
+        if (!json || json.length < 2) return null
+        return json[1].item.name
+    }
 }
 
 /**
- * @param {JQuery Element} html The JQuery element of the html to scrape within
  * @returns A string containing the unit name. If none is found returns null.
  */
-function _scrapeUnit() {
-    return $("[data-test-id='unit-block-title']").text();
+function _scrapeTaskUnit() {
+    if (isUnitView()) {
+        return $("[data-test-id='unit-block-title']").text()
+    } else {
+        const json = _scrapeLdInfo()
+        if (!json || json.length < 3) return null
+        return json[2].item.name
+    }
 }
 
 /**
- * @param {JQuery Element} html The JQuery element of the html to scrape within
- * @returns A string containing the skill name. If none is found, throws an error.
+ * For the lesson view, this extracts the "ld" information which contains lesson info.
+ * Returns a list of objects.
  */
-function _scrapeSkill() {
-    const text = $('[data-test-id="modal-title"]').text()
-    if (text) return text
-    else throw new Error('Failed to find skill name.')
+function _scrapeLdInfo() {
+    const text = $('script[type="application/ld+json"]').text()
+    const json = JSON.parse(text)
+    if (!json) return null
+    return json.itemListElement
 }
