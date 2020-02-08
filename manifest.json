@@ -3,8 +3,6 @@
 	"version": "0.0.1",
 	"description": "1-on-1 peer learning for Khan Academy.",
 	"permissions": [
-		"webRequest",
-		"activeTab",
 		"tabs",
 		"declarativeContent",
 		"*://*.khanacademy.org/",
