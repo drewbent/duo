@@ -9,9 +9,8 @@
             if (mutation.addedNodes.length == 0) return
     
             const html = $(mutation.addedNodes[0].outerHTML)
-            if (!_containsSkillCompletion(html)) return
+            if (!containsSkillCompletion(html)) return
 
-            // We don't care if these fail
             try {
                 const data = {
                     ..._scrapeQuestionData(html),
@@ -24,6 +23,12 @@
                 sendMessage('com.duo.uploadSkillCompletion', { data }, response => {
                     if (response.error) console.log(response.error)
                     else console.log('Successfully uploaded skill completion.')
+
+                    // If the student is struggling, guides will be sent bak
+                    console.log(response)
+                    if (response.guides) {
+                        showStrugglingPopup(response.guides)
+                    }
                 })
             }
             catch(err) {
@@ -65,13 +70,14 @@ function scrapeTaskSkill() {
     }
 }
 
+function containsSkillCompletion(html) {
+    return html.find('span[aria-label*="correct"]').length > 0
+}
+
 /**
  * PRIVATE METHODS
  * ===============
  */
-function _containsSkillCompletion(html) {
-    return html.find('span[aria-label*="correct"]').length > 0
-}
 
 /**
  * 

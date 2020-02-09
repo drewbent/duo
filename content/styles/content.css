@@ -44,6 +44,10 @@
   margin-bottom: var(--spacing);
 }
 
+.select {
+  width: 100%;
+}
+
 .duo-popup-subtitle {
   text-align: center;
   font-size: 15px;

@@ -24,8 +24,8 @@
 				"thirdParty/jquery-3.3.1.min.js",
 				"content/scripts/content-helpers.js",
 				"content/scripts/flash-helpers.js",
-				"content/scripts/scrape-task.js",
-				"content/scripts/struggling-detector.js"
+				"content/scripts/struggling-popup.js",
+				"content/scripts/scrape-task.js"
 			]
 		}
 	],
