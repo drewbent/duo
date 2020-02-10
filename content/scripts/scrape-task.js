@@ -25,7 +25,6 @@
                     else console.log('Successfully uploaded skill completion.')
 
                     // If the student is struggling, guides will be sent bak
-                    console.log(response)
                     if (response.guides) {
                         showStrugglingPopup(response.guides)
                     }

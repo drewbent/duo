@@ -1,69 +1,10 @@
+/**
+ * @fileoverview Provides methods for showing and interacting with the 
+ * "struggling popup"
+ */
 var strugglingPopupInjected = false
 var strugglingPopupVisible = false
 
-/**
- * @fileoverview Provides methods for showing the "struggling popup"
- */
-// $(document).ready(() => {
-    // let incorrectStreak = 0
-    // const struggleThreshold = 2
-
-    // const observer = new MutationObserver(mutations => {
-        // mutations.forEach(mutation => {
-            // if (mutation.addedNodes.length === 0) return
-    
-            // const html = $(mutation.addedNodes[0].outerHTML)
-
-            // // Correct
-            // if (_containsCorrectAlert(html)) {
-            //     console.log('Correct')
-            //     incorrectStreak = 0
-            //     return
-            // }
-
-            // if (!_containsIncorrectAlert(html)) return
-
-            // // Incorrect
-            // console.log('Incorrect')
-            // incorrectStreak += 1
-            // if (incorrectStreak < struggleThreshold) return
-
-            // // Student is struggling
-            // console.log('Student is struggling')
-
-            // const skill = scrapeTaskSkill()
-            // if (skill == null)
-            //     return console.log('Failed to scrape skill info :(')
-            
-            // sendMessage('com.duo.findGuides', { skill }, data => {
-            //     if (data.error)
-            //     return console.log(data.error)
-
-            //     incorrectStreak = 0
-            //     if (!strugglingPopupInjected) {
-            //         _injectStrugglingPopup(() => _injectGuides(data))
-            //     } else {
-            //         if (!strugglingPopupVisible)
-            //             _showStrugglingPopup()
-
-            //         _injectGuides(guideNames)
-            //     }
-            // })
-    //     })
-    // })
-    
-    // const observerConfig = {
-    //     childList: true,
-    //     subtree: true
-    // }
-    
-    // observer.observe(document.body, observerConfig)
-// })
-
-/**
- * PUBLIC METHODS
- * ==============
- */
 function showStrugglingPopup(guides) {
     if (!strugglingPopupInjected) {
         _injectStrugglingPopup(() => _injectGuides(guides))
@@ -119,8 +60,7 @@ function _injectGuides(guides) {
         $('#duo-sp-done-btn').click(() => {
             const guideId = $('#duo-sp-guide-select').children('option:selected').val()
             // Get the guide ID
-            console.log(guideId)
-            // _hideStrugglingPopup()
+            showSessionOverlay()
         })
 
         hide(noGuidesContent)

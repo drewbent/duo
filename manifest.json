@@ -24,6 +24,7 @@
 				"thirdParty/jquery-3.3.1.min.js",
 				"content/scripts/content-helpers.js",
 				"content/scripts/flash-helpers.js",
+				"content/scripts/session-overlay.js",
 				"content/scripts/struggling-popup.js",
 				"content/scripts/scrape-task.js"
 			]
