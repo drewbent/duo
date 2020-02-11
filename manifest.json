@@ -18,7 +18,7 @@
 	"content_scripts": [
 		{
 			"matches": ["https://*.khanacademy.org/math/algebra/*"],
-			"css": ["styles.css", "content/styles/content.css"],
+			"css": ["content/styles/content.css"],
 			"js": [
 				"thirdParty/handlebars.min.js", 
 				"thirdParty/jquery-3.3.1.min.js",
@@ -31,13 +31,13 @@
 		}
 	],
 	"content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://apis.google.com; object-src 'self';",
-	"page_action": {
+	"browser_action": {
 		"default_popup": "popup.html",
 		"default_icon": {
-			"16": "images/icon16-dimmed.png",
-      		"48": "images/icon48-dimmed.png",
-			"128": "images/icon128-dimmed.png",
-			"512": "images/icon512-dimmed.png"  
+			"16": "images/icon16.png",
+      		"48": "images/icon48.png",
+			"128": "images/icon128.png",
+			"512": "images/icon512.png"  
 		}
 	},
 	"icons": {

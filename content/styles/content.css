@@ -84,6 +84,11 @@
   margin-bottom: 4px;
 }
 
+.disabled {
+  background-color: lightgray !important;
+  pointer-events: none;
+}
+
 .duo-flash {
   padding-left: var(--spacing);
   padding-right: var(--spacing);
@@ -94,7 +99,6 @@
   margin-bottom: var(--spacing);
   color: white;
   display: none;
-  max-width: 220px;
 }
 
 .duo-text-field {

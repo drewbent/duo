@@ -59,8 +59,18 @@ function _injectGuides(guides) {
 
         $('#duo-sp-done-btn').click(() => {
             const guideId = $('#duo-sp-guide-select').children('option:selected').val()
-            // Get the guide ID
-            showSessionOverlay()
+            const guide = guides.find(g => g.id === parseInt(guideId, 10))
+            if (guide == null)
+                return flashError(popup, 'Something went wrong.')
+
+            sendMessage('com.duo.beginTutoringSession', { guideId }, data => {
+                if (data.error)
+                    return flashError(popup, data.error)
+
+                _hideStrugglingPopup()
+                // Data contains the session
+                showSessionOverlay(guide, data)
+            })
         })
 
         hide(noGuidesContent)
