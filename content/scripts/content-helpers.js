@@ -21,5 +21,6 @@ function show(element) {
 }
 
 function sendMessage(action, payload, cb) {
+  console.log('Sending message with action ' + action)
   chrome.runtime.sendMessage({ action, payload }, cb)
 }

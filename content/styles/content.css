@@ -125,8 +125,7 @@
   display: block;
 }
 
-/* Struggling Overlay */
-#duo-so-content {
+.overlay-content {
   background-color: white;
   padding: var(--spacing);
   border-radius: 4px;
@@ -136,4 +135,8 @@
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.duo-form-field {
+  width: 100%;
 }
