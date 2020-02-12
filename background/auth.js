@@ -9,6 +9,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .catch(sendErrorResponse(sendResponse))
     return true
   }
+  
 
   if (request.action === 'com.duo.signUp') {
     // Expects keys 'email', 'name', and 'password'

@@ -1,10 +1,8 @@
 {
 	"name": "Duo",
-	"version": "1.0",
+	"version": "1.0.1",
 	"description": "1-on-1 peer learning for Khan Academy.",
 	"permissions": [
-		"webRequest",
-		"activeTab",
 		"tabs",
 		"declarativeContent",
 		"*://*.khanacademy.org/",
@@ -19,25 +17,27 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://*.khanacademy.org/*"],
-			"css": ["styles.css"],
-			"js": ["thirdParty/handlebars.min.js", "thirdParty/jquery-3.3.1.min.js",
-				"content-script.js",
-				"dispatch.js",
-				"dom-parser.js",
-				"ui.js",
-				"duo-api.js"
+			"matches": ["https://*.khanacademy.org/math/algebra/*"],
+			"css": ["content/styles/content.css"],
+			"js": [
+				"thirdParty/handlebars.min.js", 
+				"thirdParty/jquery-3.3.1.min.js",
+				"content/scripts/content-helpers.js",
+				"content/scripts/flash-helpers.js",
+				"content/scripts/session-overlay.js",
+				"content/scripts/struggling-popup.js",
+				"content/scripts/scrape-task.js"
 			]
 		}
 	],
 	"content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://apis.google.com; object-src 'self';",
-	"page_action": {
+	"browser_action": {
 		"default_popup": "popup.html",
 		"default_icon": {
-			"16": "images/icon16-dimmed.png",
-      "48": "images/icon48-dimmed.png",
-			"128": "images/icon128-dimmed.png",
-			"512": "images/icon512-dimmed.png"  
+			"16": "images/icon16.png",
+      		"48": "images/icon48.png",
+			"128": "images/icon128.png",
+			"512": "images/icon512.png"  
 		}
 	},
 	"icons": {
