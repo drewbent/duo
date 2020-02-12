@@ -63,7 +63,8 @@ function _injectGuides(guides) {
             if (guide == null)
                 return flashError(popup, 'Something went wrong.')
 
-            sendMessage('com.duo.beginTutoringSession', { guideId }, data => {
+            const skill = scrapeTaskSkill()
+            sendMessage('com.duo.beginTutoringSession', { guideId, skill }, data => {
                 if (data.error)
                     return flashError(popup, data.error)
 

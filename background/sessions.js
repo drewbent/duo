@@ -4,13 +4,17 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === 'com.duo.beginTutoringSession') {
-        const { guideId } = request.payload
+        const { guideId, skill } = request.payload
         fetchAllCurrentUserData().then(({ user, loginData }) => {
             if (user == null || loginData == null || loginData.id == null)
                 return sendResponse({ error: 'Not signed in.' })
 
             if (loginData.id === guideId) return sendResponse({error: 'You cannot select yourself.'})
-            api.post(`/tutoring-sessions`, { guide_id: guideId, learner_id: loginData.id })
+            api.post(`/tutoring-sessions`, { 
+                guide_id: guideId, 
+                learner_id: loginData.id,
+                skill,
+            })
                 .then(sendResponse)
                 .catch(sendErrorResponse(sendResponse))
         })

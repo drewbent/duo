@@ -92,7 +92,7 @@ function _startSessionTimer() {
         clearInterval(_interval)
     
     const el = $('#duo-so-timer-text')
-    const baseText = `Session with ${currentGuide.name}: `
+    const baseText = `Session for '${currentSession.skill}' with ${currentGuide.name}: `
     let seconds = 0
 
     function updateText() {
