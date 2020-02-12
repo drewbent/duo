@@ -151,7 +151,7 @@ function _injectFormQuestions(questions) {
         switch (question.type) {
             case 'text':
                 text += `
-                    <input id='${id}' 'type='text' class='duo-form-field' name='${question.question}'><br/>
+                    <input id='${id}' type='text' class='duo-form-field' name='${question.question}' value='...'><br/>
                 `
                 valFns.push(() => $(`input[id='${id}']`).val())
                 break
