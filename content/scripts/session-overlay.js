@@ -78,11 +78,6 @@ function _injectSessionOverlay() {
                 })
             })
         })
-
-        const form = $('#duo-so-form-body')
-        form.submit(e => {
-            console.log(e)
-        })
     })
 }
 

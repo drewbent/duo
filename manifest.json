@@ -1,6 +1,6 @@
 {
 	"name": "Duo",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "1-on-1 peer learning for Khan Academy.",
 	"permissions": [
 		"tabs",
