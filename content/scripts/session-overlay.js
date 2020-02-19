@@ -57,6 +57,8 @@ function _injectSessionOverlay() {
 
         const overlay = $('#duo-so-container')
         const content = $('#duo-so-content')
+        
+        hide($('#outer-wrapper'))
 
         const cancelButton = overlay.find('#duo-so-cancel-btn')
         const reasonSelect = overlay.find('#cancellation-reason-select')
@@ -129,11 +131,15 @@ function _showSessionOverlay() {
 
     show($('#duo-so-container'))
     _showSessionContent()
+
+    hide($('#outer-wrapper'))
 }
 
 function _hideSessionOverlay() {
     hide($('#duo-so-container'))
     sessionOverlayVisible = false
+
+    show($('#outer-wrapper'))
 }
 
 function _showSessionContent() {
@@ -163,7 +169,7 @@ function _injectFormQuestions(questions) {
         switch (question.type) {
             case 'text':
                 text += `
-                    <input id='${id}' type='text' class='duo-form-field' name='${question.question}' value='...'><br/>
+                    <input id='${id}' type='text' class='duo-form-field' name='${question.question}'><br/>
                 `
                 valFns.push(() => $(`input[id='${id}']`).val())
                 break
