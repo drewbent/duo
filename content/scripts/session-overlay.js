@@ -5,8 +5,25 @@
 var sessionOverlayVisible = false
 var sessionOverlayInjected = false
 
-var currentGuide = undefined
-var currentSession = undefined
+// var currentGuide = undefined
+var currentGuide = { name: 'Bob', id: '10' }
+// var currentSession = undefined
+var currentSession = { id: 1 }
+
+// Temp
+console.log('Running')
+showSessionOverlay({ name: 'Bob', id: '10' }, { id: 1 })
+setTimeout(() => {
+    console.log('Fetching form')
+    sendMessage('com.duo.fetchForm', {}, data => {
+        if (data.error)
+            return flashError(content, data.error)
+
+        console.log(data)
+        // _injectFormQuestions(data)
+        // _showSessionForm()
+    })
+}, 300)
 
 function showSessionOverlay(guide, session) {
     if (!guide || !session) {
@@ -69,7 +86,7 @@ function _injectSessionOverlay() {
                 if (data.error)
                     return flashError(content, data.error)
                 
-                sendMessage('com.duo.fetchLearnerForm', {}, data => {
+                sendMessage('com.duo.fetchForm', {}, data => {
                     if (data.error)
                         return flashError(content, data.error)
 
