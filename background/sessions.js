@@ -46,7 +46,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (user == null || loginData == null || loginData.id == null)
                 return sendResponse({ error: 'Not signed in.' })
 
-            console.log('Sending this?')
             api.get(`/students/${loginData.id}/tutoring-sessions/current-learning`)
                 .then(sendResponse)
                 .catch(sendErrorResponse)

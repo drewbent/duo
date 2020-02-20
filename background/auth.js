@@ -1,6 +1,15 @@
 /**
  * @fileoverview For managing auth
  */
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+  .then(() => {
+    console.log('Set firebase persistence to none')
+  })
+  .catch(err => {
+    console.log('Error setting firebase persistence to none: ' + err.message)
+  })
+
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'com.duo.verifyEmail') {
     const { email } = request.payload
