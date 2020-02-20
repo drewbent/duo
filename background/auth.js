@@ -1,6 +1,8 @@
 /**
  * @fileoverview For managing auth
  */
+var _isInPeerX = true
+
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
   .then(() => {
     console.log('Set firebase persistence to none')
@@ -52,6 +54,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.action === 'com.duo.fetchCurrentUser') {
     getCurrentUser().then(sendResponse)
+    return true
+  }
+
+  if (request.action === 'com.duo.setIsInPeerX') {
+    const { isInPeerX } = request.payload
+    _isInPeerX = isInPeerX
+    return true
+  }
+
+  if (request.action === 'com.duo.shouldShowSignInPrompt') {
+    getCurrentUser().then(user => {
+      sendResponse(user == null && _isInPeerX)
+    })
     return true
   }
 })

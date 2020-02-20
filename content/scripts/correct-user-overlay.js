@@ -6,8 +6,8 @@ var signInOverlayInjected = false
 var signInOverlayVisible = false
 
 if (isOnKAPage()) {
-  _isSignedIn(signedIn => {
-    if (!signedIn) _injectSignInOverlay()
+  sendMessage('com.duo.shouldShowSignInPrompt', {}, show => {
+    if (show) _injectSignInOverlay()
   })
 }
 
@@ -20,6 +20,7 @@ function _injectSignInOverlay() {
     const container = $('#duo-sitd-container')
 
     $('#duo-sitd-cancel-btn').click(() => {
+      sendMessage('com.duo.setIsInPeerX', { isInPeerX: false })
       _hideSignInOverlay()
     })
 
@@ -44,10 +45,6 @@ function _showSignInOverlay() {
   signInOverlayVisible = false
 }
 
-/**
- * @param {Function} cb A callback that passes a bool indicating whether or not the
- * user is signed in
- */
 function _isSignedIn(cb) {
   sendMessage('com.duo.fetchCurrentUser', {}, user => cb(user != null))
 }
