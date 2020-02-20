@@ -10,6 +10,29 @@ var currentGuide = undefined
 var currentSession = undefined
 // var currentSession = { id: 1 }
 
+/**
+ * Every time this runs (which would be every time the page reloads), (1) check to 
+ * see if the URL is a KhanAcademy URL. If it is, check to see if the current user
+ * has an active session. If they do, show the session overlay.
+ */
+const regex = RegExp('.*\:\/\/.*khanacademy\.org/*')
+if (regex.test(window.location.href)) {
+    sendMessage('com.duo.getCurrentUserSession', {}, data => {
+        if (data && data.guide && data.session) {
+            console.log('This student is currently in a session.')
+            showSessionOverlay(data.guide, data.session)
+        } else {
+            console.log(data ? data.error : 'User: no current session')
+        }
+    })
+}
+
+/**
+ * Shows the session overlay in the current tab.
+ * 
+ * @param {Object} guide 
+ * @param {Object} session 
+ */
 function showSessionOverlay(guide, session) {
     if (!guide || !session) {
         console.log('Invalid guide/session passed to session overlay:')
@@ -73,7 +96,11 @@ function _injectSessionOverlay() {
                 if (data.error)
                     return flashError(content, data.error)
                 
-                sendMessage('com.duo.fetchForm', {}, data => {
+                const sessionStart = new Date(currentSession.start_time)
+                sendMessage('com.duo.fetchForm', { sessionStart }, data => {
+                    if (!data)
+                        return _hideSessionOverlay()
+
                     if (data.error)
                         return flashError(content, data.error)
 
@@ -92,7 +119,11 @@ function _startSessionTimer() {
     
     const el = $('#duo-so-timer-text')
     const baseText = `Session for '${currentSession.skill}' with ${currentGuide.name}: `
-    let seconds = 0
+
+    // Sessions is minutes
+    let seconds = Math.floor(
+        (new Date().getTime() - Date.parse(currentSession.start_time))
+    / 1000)
 
     function updateText() {
         const mm = Math.floor(seconds / 60)

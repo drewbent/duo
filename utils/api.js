@@ -30,7 +30,10 @@ function sendAuthReq(path, data, idToken) {
       .then(response => {
         if (response.ok) {
           console.log(`${reqDesc} SUCCESS`)
-          return response.json()
+          if (response.headers.get('content-type') === 'application/json')
+            return response.json()
+          else
+            res()
         } else {
           // Failures are automatically logged
           const error = new Error(response.statusText)

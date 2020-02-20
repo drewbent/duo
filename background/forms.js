@@ -3,9 +3,10 @@
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'com.duo.fetchForm') {
+        const { sessionStart } = request.payload
         fetchAllCurrentUserData().then(({ loginData }) => {
+            const date = new Date(sessionStart)
             const classId = loginData.class_section_id
-            const date = new Date()
             const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
             api.get(`/forms/current?class_id=${classId}&date=${dateString}`)
                 .then(sendResponse)

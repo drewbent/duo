@@ -41,4 +41,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true
     }
 
+    if (request.action === 'com.duo.getCurrentUserSession') {
+        fetchAllCurrentUserData().then(({ user, loginData }) => {
+            if (user == null || loginData == null || loginData.id == null)
+                return sendResponse({ error: 'Not signed in.' })
+
+            console.log('Sending this?')
+            api.get(`/students/${loginData.id}/tutoring-sessions/current-learning`)
+                .then(sendResponse)
+                .catch(sendErrorResponse)
+        })
+
+        return true
+    }
+
 })
