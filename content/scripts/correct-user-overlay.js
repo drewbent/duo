@@ -5,9 +5,11 @@
 var signInOverlayInjected = false
 var signInOverlayVisible = false
 
-_isSignedIn(signedIn => {
-  if (!signedIn) _injectSignInOverlay()
-})
+if (isOnKAPage()) {
+  _isSignedIn(signedIn => {
+    if (!signedIn) _injectSignInOverlay()
+  })
+}
 
 function _injectSignInOverlay() {
   console.log('Injecting sign in overlay')

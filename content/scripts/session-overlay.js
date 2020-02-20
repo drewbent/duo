@@ -15,8 +15,11 @@ var currentSession = undefined
  * see if the URL is a KhanAcademy URL. If it is, check to see if the current user
  * has an active session. If they do, show the session overlay.
  */
-const regex = RegExp('.*\:\/\/.*khanacademy\.org/*')
-if (regex.test(window.location.href)) {
+if (isOnKAPage()) {
+    checkForCurrentSession()
+}
+
+function checkForCurrentSession() {
     sendMessage('com.duo.getCurrentUserSession', {}, data => {
         if (data && data.guide && data.session) {
             console.log('This student is currently in a session.')
@@ -26,6 +29,10 @@ if (regex.test(window.location.href)) {
         }
     })
 }
+
+$(document).ready(() => {
+    
+})
 
 /**
  * Shows the session overlay in the current tab.
