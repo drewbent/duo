@@ -2,9 +2,18 @@
  * @fileoverview This is global & always running on KA websites. It will detect unit
  * view task completions.
  */
+console.log('DUO TASK SCRAPING ACTIVE')
 
  $(document).ready(() => {
     const observer = new MutationObserver(mutations => {
+        /** 
+         * Low effort way of making sure this is always running; just do the 
+         * page matching here.
+         */
+        const algebraRegex = RegExp('.*\:\/\/.*khanacademy\.org/math/algebra/.*')
+        if (!algebraRegex.test(window.location.href))
+            return
+
         mutations.forEach(mutation => {
             if (mutation.addedNodes.length == 0) return
     

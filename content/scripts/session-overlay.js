@@ -5,25 +5,10 @@
 var sessionOverlayVisible = false
 var sessionOverlayInjected = false
 
-// var currentGuide = undefined
-var currentGuide = { name: 'Bob', id: '10' }
-// var currentSession = undefined
-var currentSession = { id: 1 }
-
-// Temp
-console.log('Running')
-showSessionOverlay({ name: 'Bob', id: '10' }, { id: 1 })
-setTimeout(() => {
-    console.log('Fetching form')
-    sendMessage('com.duo.fetchForm', {}, data => {
-        if (data.error)
-            return flashError(content, data.error)
-
-        console.log(data)
-        // _injectFormQuestions(data)
-        // _showSessionForm()
-    })
-}, 300)
+var currentGuide = undefined
+// var currentGuide = { name: 'Bob', id: '10' }
+var currentSession = undefined
+// var currentSession = { id: 1 }
 
 function showSessionOverlay(guide, session) {
     if (!guide || !session) {
@@ -92,7 +77,7 @@ function _injectSessionOverlay() {
                     if (data.error)
                         return flashError(content, data.error)
 
-                    _injectFormQuestions(data)
+                    _injectForm(data)
                     _showSessionForm()
                 })
             })
@@ -156,24 +141,39 @@ function _showSessionForm() {
     show(form)
 }
 
-function _injectFormQuestions(questions) {
+/**
+ * 
+ * @param {Object} form ALL form info; an object with keys { distribution, form,
+ * questions: { form_question, question }[] }
+ */
+function _injectForm(formData) {
     const container = $('#duo-so-form')
+
+    // Various UI stuff
+    $('#duo-so-form-title').text(formData.form.name)
+
     const form = $('#duo-so-form-body')
     form.empty()
     let html = ''
-    const questionTexts = questions.map(q => q.question)
     let valFns = []
-    questions.forEach((question, index) => {
-        let text = `<strong>${question.question}:</strong><br/>`
+    formData.questions.forEach((questionData, index) => {
+        const { question, form_question: formQuestion } = questionData
+        let text = `<strong>${question.question}${formQuestion.required ? '*' : ''}:</strong><br/>`
         const id = `duo-form-${index}`
-        switch (question.type) {
-            case 'text':
+        switch (question.question_type) {
+            case 'long_text':
+                text += `
+                    <textarea id='${id}' class='duo-form-field'></textarea><br/>
+                `
+                valFns.push(() => $(`textarea[id='${id}']`).val())
+                break
+            case 'short_text':
                 text += `
                     <input id='${id}' type='text' class='duo-form-field' name='${question.question}'><br/>
                 `
                 valFns.push(() => $(`input[id='${id}']`).val())
                 break
-            case 'options':
+            case 'linear_scale':
                 text += `
                     <select id=${id}>
                     <option value='__nothing' disabled selected value> –– select an option –– </option>
@@ -182,7 +182,7 @@ function _injectFormQuestions(questions) {
                     text += `<option value='${option.value}'>${option.text}<br/>`
                 })
                 text += '</select><br/>'
-                valFns.push(() => $(`select[id='${id}']`).val())
+                valFns.push(() => parseInt($(`select[id='${id}']`).val(), 10))
                 break
         }
 
@@ -192,26 +192,31 @@ function _injectFormQuestions(questions) {
     form.html(html)
 
     $('#duo-so-form-submit').off().click(() => {
-        const answers = valFns.map(f => f())
-        if (answers.length !== questionTexts.length)
+        const responses = valFns.map(f => f())
+        if (responses.length !== formData.questions.length)
             return flashError(container, 'Something went wrong.')
-            
-        for (answer of answers) {
-            if (!answer || answer == null)
-                return flashError(container, 'Please answer every question.')
-        }
         
-        hideFlash(container)
-        let responses = {}
-        for (let i = 0; i < questionTexts.length; i++) {
-            responses[questionTexts[i]] = answers[i]
+        const responseData = {}
+        for (let i = 0; i < responses.length; i++) {
+            const formQuestion = formData.questions[i].form_question
+
+            if (formQuestion.required && !responses[i]) {
+                return flashError(container, 'Please answer each required question.')
+            }
+            responseData[formQuestion.id] = responses[i]
         }
 
-        sendMessage('com.duo.uploadLearnerForm', { sessionId: currentSession.id, questions: responses }, data => {
+        hideFlash(container)
+
+        sendMessage('com.duo.uploadFeedback', { 
+            sessionId: currentSession.id, 
+            responses: responseData,
+            distributionId: formData.distribution.id,
+        }, data => {
             if (data.error)
                 return flashError(container, data.error)
 
-            _hideSessionOverlay()       
+            _hideSessionOverlay()
         })
     })
 }

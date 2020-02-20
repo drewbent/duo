@@ -18,7 +18,6 @@ function showStrugglingPopup(guides) {
  * PRIVATE METHODS
  * ===============
  */
-
 function _injectStrugglingPopup(cb) {
     $.get(chrome.runtime.getURL('content/html/struggling-popup.html'), data => {
         $(data).appendTo('body')

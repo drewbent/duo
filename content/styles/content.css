@@ -138,6 +138,10 @@
   box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.2);
 }
 
+#duo-so-form {
+  padding-right: 16px;
+}
+
 .duo-form-field {
   width: 100%;
 }
