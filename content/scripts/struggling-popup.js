@@ -4,6 +4,7 @@
  */
 var strugglingPopupInjected = false
 var strugglingPopupVisible = false
+var currentGuides = []
 
 function showStrugglingPopup(guides) {
     if (!strugglingPopupInjected) {
@@ -28,6 +29,23 @@ function _injectStrugglingPopup(cb) {
             _hideStrugglingPopup()
         })
 
+        $('#duo-sp-done-btn').click(() => {
+            const guideId = $('#duo-sp-guide-select').children('option:selected').val()
+            const guide = currentGuides.find(g => g.id === parseInt(guideId, 10))
+            if (guide == null)
+                return flashError(popup, 'Something went wrong.')
+
+            const skill = scrapeTaskSkill()
+            sendMessage('com.duo.beginTutoringSession', { guideId, skill }, data => {
+                if (data.error)
+                    return flashError(popup, data.error)
+
+                _hideStrugglingPopup()
+                // Data contains the session
+                showSessionOverlay(guide, data)
+            })
+        })
+
         strugglingPopupInjected = true
         if (cb) cb()
     })
@@ -43,6 +61,8 @@ function _injectGuides(guides) {
     const list = popup.find('select')
     list.empty()
 
+    currentGuides = guides
+
     if (guides.length === 0) {
         subtitle.text('Looks like you\'re having trouble! Please find a classmate to help you, or go to Phil and Drew to find help.')
         hide(yesGuidesContent)
@@ -55,23 +75,6 @@ function _injectGuides(guides) {
 
         const nameInput = $('#duo-sp-name-input')
         nameInput.val('')
-
-        $('#duo-sp-done-btn').click(() => {
-            const guideId = $('#duo-sp-guide-select').children('option:selected').val()
-            const guide = guides.find(g => g.id === parseInt(guideId, 10))
-            if (guide == null)
-                return flashError(popup, 'Something went wrong.')
-
-            const skill = scrapeTaskSkill()
-            sendMessage('com.duo.beginTutoringSession', { guideId, skill }, data => {
-                if (data.error)
-                    return flashError(popup, data.error)
-
-                _hideStrugglingPopup()
-                // Data contains the session
-                showSessionOverlay(guide, data)
-            })
-        })
 
         hide(noGuidesContent)
         show(yesGuidesContent)

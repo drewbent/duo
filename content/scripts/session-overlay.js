@@ -30,10 +30,6 @@ function checkForCurrentSession() {
     })
 }
 
-$(document).ready(() => {
-    
-})
-
 /**
  * Shows the session overlay in the current tab.
  * 
@@ -152,7 +148,11 @@ function _showSessionOverlay() {
     const reasonSelect = $('#cancellation-reason-select')
     reasonSelect.val('__nothing')
 
-    show($('#duo-so-container'))
+    const overlay = $('#duo-so-container')
+    const cancelButton = overlay.find('#duo-so-cancel-btn')
+    cancelButton.addClass('disabled')
+
+    show(overlay)
     _showSessionContent()
 
     hide($('#outer-wrapper'))
