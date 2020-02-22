@@ -1,6 +1,6 @@
 {
 	"name": "Duo",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "1-on-1 peer learning for Khan Academy.",
 	"permissions": [
 		"tabs",
@@ -17,7 +17,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://*/*"],
+			"matches": ["https://*.khanacademy.org/*"],
 			"css": ["content/styles/content.css"],
 			"js": [
 				"thirdParty/handlebars.min.js", 

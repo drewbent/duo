@@ -3,13 +3,13 @@
  */
 var _isInPeerX = true
 
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
-  .then(() => {
-    console.log('Set firebase persistence to none')
-  })
-  .catch(err => {
-    console.log('Error setting firebase persistence to none: ' + err.message)
-  })
+// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+//   .then(() => {
+//     console.log('Set firebase persistence to none')
+//   })
+//   .catch(err => {
+//     console.log('Error setting firebase persistence to none: ' + err.message)
+//   })
 
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
