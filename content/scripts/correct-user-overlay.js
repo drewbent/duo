@@ -26,9 +26,9 @@ if (isOnKAPage()) {
   observer.observe(document.body, observerConfig)
 }
 
-function showMismatchPopup(name) {
-  if (accountMismatchPopupInjected) _showMismatchPopup(name)
-  else _injectMismatchPopup(name)
+function showMismatchPopup(duoName, kaName) {
+  if (accountMismatchPopupInjected) _showMismatchPopup(duoName, kaName)
+  else _injectMismatchPopup(duoName, kaName)
 }
 
 function _detectCurrentUserMistmatch() {
@@ -45,18 +45,18 @@ function _detectCurrentUserMistmatch() {
       if (!duoUserData) return
 
       if (duoUserData.name !== name)
-        showMismatchPopup(duoUserData.name)
+        showMismatchPopup(duoUserData.name, name)
     })
   })
 }
 
-function _injectMismatchPopup(name) {
+function _injectMismatchPopup(duoName, kaName) {
   console.log('Injecting account mismatch popup')
   accountMismatchPopupInjected = true
   accountMismatchPopupVisible = true
   $.get(chrome.runtime.getURL('content/html/account-mismatch-popup.html'), data => {
     $(data).appendTo('body')
-    _setMismatchPopupSubtitle(name)
+    _setMismatchPopupSubtitle(duoName, kaName)
 
     $('#duo-amp-close-btn').click(() => {
       _hideMismatchPopup()
@@ -101,15 +101,15 @@ function _hideMismatchPopup() {
   accountMismatchPopupVisible = false
 }
 
-function _showMismatchPopup(user) {
-  _setMismatchPopupSubtitle(user)
+function _showMismatchPopup(duoName, kaName) {
+  _setMismatchPopupSubtitle(duoName, kaName)
   show($('#duo-amp-container'))
   accountMismatchPopupVisible = true
 }
 
-function _setMismatchPopupSubtitle(user) {
+function _setMismatchPopupSubtitle(duoName, kaName) {
   const container = $('#duo-amp-container')
-  setSubtitle(container, `Warning: You are signed in to Duo as ${user}.`)
+  setSubtitle(container, `Warning: You are signed in to Duo as ${duoName}, not ${kaName}.`)
 }
 
 function _isSignedIn(cb) {
