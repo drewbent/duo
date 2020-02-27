@@ -155,6 +155,7 @@
   background-color: var(--primary-color);
   cursor: pointer;
   text-align: center;
+  margin-left: 8px;
 }
 
 #duo-sp-no-guides-content {

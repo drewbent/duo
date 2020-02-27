@@ -21,13 +21,15 @@ $(document).ready(() => {
 
 function _showGetHelpButtonIfApplicable() {
   if (isUnitView()) {
-
+    const title = $('h1[data-test-id="modal-title"]')
+    if (!title || title.text() === '') return _hideGetHelpButton()
+    _showOrInjectGetHelpButton(title.parent())
   } else {
     // Lesson view
     const page = $('div[data-test-id="tutorial-page"]')
     if (page.length === 0) return _hideGetHelpButton()
     const title = page.find('h1').first()
-    if (!title) return _hideGetHelpButton()
+    if (!title || title.text() === '') return _hideGetHelpButton()
 
     const titleContainer = title.parent()
     _showOrInjectGetHelpButton(titleContainer)
@@ -61,10 +63,12 @@ function _injectGetHelpButton(container) {
 
 function _showGetHelpButton() {
   if (getHelpButtonVisible) return
+  show($('#duo-get-help-btn'))
 }
 
 function _hideGetHelpButton() {
   if (!getHelpButtonVisible) return
+  hide($('#duo-get-help-btn'))
 }
 
 function _isGetHelpButtonInjected() {
