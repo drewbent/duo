@@ -6,12 +6,19 @@ var strugglingPopupInjected = false
 var strugglingPopupVisible = false
 var currentGuides = []
 
-function showStrugglingPopup(guides) {
+/**
+ * Display the struggling popup
+ * 
+ * @param {Object[]} guides A list of guides
+ * @param {Boolean} cancellable Will give the user the option to cancel, even if
+ * there are available guides. 
+ */
+function showStrugglingPopup(guides, cancellable = false) {
     if (!strugglingPopupInjected) {
-        _injectStrugglingPopup(() => _injectGuides(guides))
+        _injectStrugglingPopup(() => _injectGuides(guides, cancellable))
     } else {
         if (!strugglingPopupVisible) _showStrugglingPopup()
-        _injectGuides(guides)
+        _injectGuides(guides, cancellable)
     }
 }
 
@@ -51,7 +58,7 @@ function _injectStrugglingPopup(cb) {
     })
 }
 
-function _injectGuides(guides) {
+function _injectGuides(guides, cancellable = false) {
     const popup = $(`#duo-sp-container`)
     const noGuidesContent = popup.find('#duo-sp-no-guides-content')
     const yesGuidesContent = popup.find('#duo-sp-find-guide-content')
@@ -68,7 +75,7 @@ function _injectGuides(guides) {
         hide(yesGuidesContent)
         show(noGuidesContent)
     } else {
-        subtitle.text('Looks like you\'re having trouble! Please find one of these students to guide you, and then enter their name below.')
+        subtitle.text('Looks like you\'re having trouble! Please find one of these students to guide you, then select their name below.')
         list.html(guides.map(guide => `
             <option class='text-normal-size' value=${guide.id}>${guide.name}</li>
         `))
@@ -76,7 +83,8 @@ function _injectGuides(guides) {
         const nameInput = $('#duo-sp-name-input')
         nameInput.val('')
 
-        hide(noGuidesContent)
+        if (cancellable) show(noGuidesContent)
+        else hide(noGuidesContent)
         show(yesGuidesContent)
     }
 }

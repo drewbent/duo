@@ -145,3 +145,18 @@
 .duo-form-field {
   width: 100%;
 }
+
+#duo-get-help-btn {
+  width: 100px;
+  height: 32px;
+  color: white;
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  text-align: center;
+}
+
+#duo-sp-no-guides-content {
+  margin-top: 8px;
+}

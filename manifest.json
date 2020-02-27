@@ -27,7 +27,8 @@
 				"content/scripts/session-overlay.js",
 				"content/scripts/struggling-popup.js",
 				"content/scripts/scrape-task.js",
-				"content/scripts/correct-user-overlay.js"
+				"content/scripts/correct-user-overlay.js",
+				"content/scripts/get-help.js"
 			]
 		}
 	],

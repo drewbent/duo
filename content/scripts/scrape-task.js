@@ -10,8 +10,7 @@ console.log('DUO TASK SCRAPING ACTIVE')
          * Low effort way of making sure this is always running; just do the 
          * page matching here.
          */
-        if (!isOnKAPage('math/algebra/.*'))
-            return
+        if (!isOnKAPage('math/.*')) return
 
         mutations.forEach(mutation => {
             if (mutation.addedNodes.length == 0) return
