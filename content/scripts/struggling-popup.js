@@ -5,20 +5,22 @@
 var strugglingPopupInjected = false
 var strugglingPopupVisible = false
 var currentGuides = []
+var _isGetHelp = false
 
 /**
  * Display the struggling popup
  * 
  * @param {Object[]} guides A list of guides
- * @param {Boolean} cancellable Will give the user the option to cancel, even if
- * there are available guides. 
+ * @param {Boolean} isGetHelp Whether or not this was triggered from the 'get help'
+ * button. Will affect behavior
  */
-function showStrugglingPopup(guides, cancellable = false) {
+function showStrugglingPopup(guides, isGetHelp = false) {
+    _isGetHelp = isGetHelp
     if (!strugglingPopupInjected) {
-        _injectStrugglingPopup(() => _injectGuides(guides, cancellable))
+        _injectStrugglingPopup(() => _injectGuides(guides))
     } else {
         if (!strugglingPopupVisible) _showStrugglingPopup()
-        _injectGuides(guides, cancellable)
+        _injectGuides(guides)
     }
 }
 
@@ -43,7 +45,11 @@ function _injectStrugglingPopup(cb) {
                 return flashError(popup, 'Something went wrong.')
 
             const skill = scrapeTaskSkill()
-            sendMessage('com.duo.beginTutoringSession', { guideId, skill }, data => {
+            sendMessage('com.duo.beginTutoringSession', { 
+                guideId, 
+                skill, 
+                manuallyRequested: _isGetHelp 
+            }, data => {
                 if (data.error)
                     return flashError(popup, data.error)
 
@@ -58,7 +64,7 @@ function _injectStrugglingPopup(cb) {
     })
 }
 
-function _injectGuides(guides, cancellable = false) {
+function _injectGuides(guides) {
     const popup = $(`#duo-sp-container`)
     const noGuidesContent = popup.find('#duo-sp-no-guides-content')
     const yesGuidesContent = popup.find('#duo-sp-find-guide-content')
@@ -83,7 +89,7 @@ function _injectGuides(guides, cancellable = false) {
         const nameInput = $('#duo-sp-name-input')
         nameInput.val('')
 
-        if (cancellable) show(noGuidesContent)
+        if (_isGetHelp) show(noGuidesContent)
         else hide(noGuidesContent)
         show(yesGuidesContent)
     }

@@ -24,7 +24,6 @@ function _showGetHelpButtonIfApplicable() {
 
   } else {
     // Lesson view
-    // console.log("lesson view")
     const page = $('div[data-test-id="tutorial-page"]')
     if (page.length === 0) return _hideGetHelpButton()
     const title = page.find('h1').first()

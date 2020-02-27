@@ -4,7 +4,7 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === 'com.duo.beginTutoringSession') {
-        const { guideId, skill } = request.payload
+        const { guideId, skill, manuallyRequested } = request.payload
         fetchAllCurrentUserData().then(({ user, loginData }) => {
             if (user == null || loginData == null || loginData.id == null)
                 return sendResponse({ error: 'Not signed in.' })
@@ -14,6 +14,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 guide_id: guideId, 
                 learner_id: loginData.id,
                 skill,
+                manually_requested: manuallyRequested,
             })
                 .then(sendResponse)
                 .catch(sendErrorResponse(sendResponse))
