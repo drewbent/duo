@@ -6,6 +6,7 @@ var signInOverlayInjected = false
 var signInOverlayVisible = false
 var accountMismatchPopupInjected = false
 var accountMismatchPopupVisible = false
+var mismatchPopupShownCount = 0
 
 if (isOnKAPage()) {
   sendMessage('com.duo.shouldShowSignInPrompt', {}, show => {
@@ -27,6 +28,8 @@ if (isOnKAPage()) {
 }
 
 function showMismatchPopup(duoName, kaName) {
+  mismatchPopupShownCount += 1
+  if (mismatchPopupShownCount > 3) return // Only show 3 times
   if (accountMismatchPopupInjected) _showMismatchPopup(duoName, kaName)
   else _injectMismatchPopup(duoName, kaName)
 }

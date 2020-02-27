@@ -1,5 +1,5 @@
-const API_URL = 'https://duo-learn.herokuapp.com/'
-// const API_URL = 'http://localhost:5000'
+// const API_URL = 'https://duo-learn.herokuapp.com/'
+const API_URL = 'http://localhost:5000'
 
 function sendReq(path, data) {
   return new Promise((res, rej) => {

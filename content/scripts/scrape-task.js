@@ -10,8 +10,7 @@ console.log('DUO TASK SCRAPING ACTIVE')
          * Low effort way of making sure this is always running; just do the 
          * page matching here.
          */
-        const algebraRegex = RegExp('.*\:\/\/.*khanacademy\.org/math/algebra/.*')
-        if (!algebraRegex.test(window.location.href))
+        if (!isOnKAPage('math/algebra/.*'))
             return
 
         mutations.forEach(mutation => {

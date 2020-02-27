@@ -25,7 +25,7 @@ function sendMessage(action, payload, cb) {
   chrome.runtime.sendMessage({ action, payload }, cb)
 }
 
-var _kaRegex = RegExp('.*\:\/\/.*khanacademy\.org/*')
-function isOnKAPage() {
-  return _kaRegex.test(window.location.href)
+function isOnKAPage(path) {
+  const regex = RegExp(`.*\:\/\/.*khanacademy\.org/${path || '.*'}`)
+  return regex.test(window.location.href)
 }
