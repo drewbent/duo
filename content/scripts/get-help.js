@@ -53,7 +53,7 @@ function _injectGetHelpButton(container) {
 
     $('#duo-get-help-btn').off().click(() => {
       const skill = scrapeTaskSkill()
-      sendMessage('com.duo.findGuides', { skill }, data => {
+      sendMessage('com.duo.findE4NMatches', { skill }, data => {
         if (data.error) return console.warn(data.error)
         showStrugglingPopup(data, true)
       })
