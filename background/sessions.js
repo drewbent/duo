@@ -4,7 +4,7 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === 'com.duo.beginTutoringSession') {
-        const { guideId, skill, manuallyRequested } = request.payload
+        const { guideId, skill, manuallyRequested, conferenceLink } = request.payload
         fetchAllCurrentUserData().then(({ user, loginData }) => {
             if (user == null || loginData == null || loginData.id == null)
                 return sendResponse({ error: 'Not signed in.' })
@@ -15,6 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 learner_id: loginData.id,
                 skill,
                 manually_requested: manuallyRequested,
+                conference_link: conferenceLink,
             })
                 .then(sendResponse)
                 .catch(sendErrorResponse(sendResponse))
@@ -42,16 +43,48 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true
     }
 
-    if (request.action === 'com.duo.getCurrentUserSession') {
+    if (request.action === 'com.duo.rejectTutoringSession') {
+        const { sessionId, note } = request.payload
+
+        api.post(`/tutoring-sessions/${sessionId}/reject`, { note })
+            .then(sendResponse)
+            .catch(sendErrorResponse(sendResponse))
+
+        return true
+    }
+
+    if (request.action === 'com.duo.acceptTutoringSession') {
+        const { sessionId } = request.payload
+
+        api.post(`/tutoring-sessions/${sessionId}/acceept`)
+            .then(sendResponse)
+            .catch(sendErrorResponse(sendResponse))
+
+        return true
+    }
+
+    if (request.action === 'com.duo.getCurrentLearnerSession') {
         fetchAllCurrentUserData().then(({ user, loginData }) => {
             if (user == null || loginData == null || loginData.id == null)
                 return sendResponse({ error: 'Not signed in.' })
 
             api.get(`/students/${loginData.id}/tutoring-sessions/current-learning`)
                 .then(sendResponse)
-                .catch(sendErrorResponse)
+                .catch(sendErrorResponse(sendResponse))
         })
 
+        return true
+    }
+
+    if (request.action === 'com.duo.getPendingGuideSession') {
+        fetchAllCurrentUserData().then(({ user, loginData }) => {
+            if (user == null || loginData == null || loginData.id == null)
+                return sendResponse({ error: 'Not signed in' })
+
+            api.get(`/students/${loginData.id}/tutoring-sessions/pending-guide`)
+                .then(sendResponse)
+                .catch(sendErrorResopnse(sendResponse))
+        })
         return true
     }
 

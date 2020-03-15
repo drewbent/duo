@@ -6,6 +6,7 @@ var strugglingPopupInjected = false
 var strugglingPopupVisible = false
 var currentGuides = []
 var _isGetHelp = false
+var _isOnlineMode = false
 
 /**
  * Display the struggling popup
@@ -16,6 +17,7 @@ var _isGetHelp = false
  */
 function showStrugglingPopup(guides, isGetHelp = false, isOnline) {
     _isGetHelp = isGetHelp
+    _isOnlineMode = isOnline
     if (!strugglingPopupInjected) {
         _injectStrugglingPopup(() => _injectGuides(guides, isOnline))
     } else {
@@ -48,14 +50,19 @@ function _injectStrugglingPopup(cb) {
             sendMessage('com.duo.beginTutoringSession', { 
                 guideId, 
                 skill, 
-                manuallyRequested: _isGetHelp 
+                manuallyRequested: _isGetHelp,
+                conferenceLink: $('#duo-sp-conferencing-field').val()
             }, data => {
                 if (data.error)
                     return flashError(popup, data.error)
 
                 _hideStrugglingPopup()
-                // Data contains the session
-                showSessionOverlay(guide, data)
+
+                if (_isOnlineMode) {
+                    showRequestPendingPopup()
+                } else {
+                    showSessionOverlay(guide, data)
+                }
             })
         })
 

@@ -20,10 +20,13 @@ if (isOnKAPage()) {
 }
 
 function checkForCurrentSession() {
-    sendMessage('com.duo.getCurrentUserSession', {}, data => {
+    sendMessage('com.duo.getCurrentLearnerSession', {}, data => {
         if (data && data.guide && data.session) {
             console.log('This student is currently in a session.')
-            showSessionOverlay(data.guide, data.session)
+            if (data.session.conference_link && data.session.request_status === 'pending')
+                showRequestPendingPopup()
+            else
+                showSessionOverlay(data.guide, data.session)
         } else {
             console.log(data ? data.error : 'User: no current session')
         }
