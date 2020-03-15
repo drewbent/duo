@@ -23,6 +23,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true
     }
 
+    if (request.action === 'com.duo.getTutoringSession') {
+        const { sessionId } = request.payload
+
+        api.get(`/tutoring-sessions/${sessionId}`)
+            .then(sendResponse)
+            .catch(sendErrorResponse(sendResponse))
+
+        return true
+    }
+
     if (request.action === 'com.duo.finishTutoringSession') {
         const { sessionId } = request.payload
         

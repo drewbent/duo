@@ -19,6 +19,7 @@ function _fetchPendingGuideSession() {
     if (data.error) return
     const { learner, session } = data
     _guideRequestCurrentSession = session
+    _guideRequestCurrentLearner = learner
     showGuideRequestPopup(() => {
       _setLearner(learner)
     })

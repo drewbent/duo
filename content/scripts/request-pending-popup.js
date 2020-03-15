@@ -1,9 +1,16 @@
 var _requestPendingPollingInterval = null
 var _requestPendingPopupInjected = false
 var _requestPendingPopupVisible = false
+var _requestPendingCurrentGuide = null
 var _requestPendingCurrentSession = null
 
-function showRequestPendingPopup() {
+// NEEDS TO FETCH THE SESSION BASED ON ID
+
+function showRequestPendingPopup(session, guide) {
+  console.log(session)
+  console.log(guide)
+  _requestPendingCurrentSession = session
+  _requestPendingCurrentGuide = guide
   if (_requestPendingPopupInjected) {
     _showRequestPendingPopup()
   } else {
@@ -62,22 +69,28 @@ function _stopSessionPolling() {
 }
 
 function _fetchCurrentSession() {
-  sendMessage('com.duo.getCurrentLearnerSession', {}, data => {
-    if (data.error) return
-    const { session, guide } = data
-    _requestPendingCurrentSession = session
+  if (_requestPendingCurrentSession == null) return console.log('No session to fetch')
+
+  sendMessage('com.duo.getTutoringSession', { 
+    sessionId: _requestPendingCurrentSession.id 
+  }, data => {
+    if (data.error) return console.warn(data.error)
+    _requestPendingCurrentSession = data
+    const guide = _requestPendingCurrentGuide || {name: 'guide'}
     
     const popup = $('#duo-rp-container')
     setSubtitle(popup, `Waiting for ${guide.name}'s response...`)
 
-    switch (session.request_status) {
+    switch (data.request_status) {
       case 'not_applicable':
       case 'accepted':
         _hideRequestPendingPopup()
-        _showSessionOverlay(guide, session)
+        _showSessionOverlay(guide, data)
+        console.log('Session accepted')
         break
       case 'rejected':
-        alert(`${guide.name} has rejected your request: ${session.rejection_note}`)
+        _hideRequestPendingPopup()
+        alert(`${guide.name} has rejected your request: ${data.rejection_note}`)
         break
     }
   })

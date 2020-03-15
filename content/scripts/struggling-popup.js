@@ -59,7 +59,7 @@ function _injectStrugglingPopup(cb) {
                 _hideStrugglingPopup()
 
                 if (_isOnlineMode) {
-                    showRequestPendingPopup()
+                    showRequestPendingPopup(data, guide)
                 } else {
                     showSessionOverlay(guide, data)
                 }

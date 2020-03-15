@@ -24,7 +24,7 @@ function checkForCurrentSession() {
         if (data && data.guide && data.session) {
             console.log('This student is currently in a session.')
             if (data.session.conference_link && data.session.request_status === 'pending')
-                showRequestPendingPopup()
+                showRequestPendingPopup(data.session, data.guide)
             else
                 showSessionOverlay(data.guide, data.session)
         } else {
