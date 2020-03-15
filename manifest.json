@@ -30,7 +30,8 @@
 				"content/scripts/correct-user-overlay.js",
 				"content/scripts/get-help.js",
 				"content/scripts/request-pending-popup.js",
-				"content/scripts/guide-session-request-popup.js"
+				"content/scripts/guide-session-request-popup.js",
+				"content/scripts/guide-current-session-popup.js"
 			]
 		}
 	],

@@ -173,6 +173,15 @@ function _showSessionContent() {
     const form = $('#duo-so-form')
     hide(form)
     show(content)
+
+    // Show the conference link
+    const conferenceText = $('#duo-so-conference-text')
+    if (currentSession.conference_link != null) {
+        conferenceText.text(currentSession.conference_link)
+        show(conferenceText)
+    } else {
+        hide(conferenceText)
+    }
 }
 
 function _showSessionForm() {

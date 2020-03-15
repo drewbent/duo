@@ -53,7 +53,7 @@ function _startSessionPolling() {
   _fetchCurrentSession()
   _requestPendingPollingInterval = setInterval(() => {
     _fetchCurrentSession()
-  }, 2000)
+  }, 3000)
 }
 
 function _stopSessionPolling() {

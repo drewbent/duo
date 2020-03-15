@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'com.duo.acceptTutoringSession') {
         const { sessionId } = request.payload
 
-        api.post(`/tutoring-sessions/${sessionId}/acceept`)
+        api.post(`/tutoring-sessions/${sessionId}/accept`)
             .then(sendResponse)
             .catch(sendErrorResponse(sendResponse))
 
@@ -85,6 +85,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 .then(sendResponse)
                 .catch(sendErrorResopnse(sendResponse))
         })
+        return true
+    }
+
+    if (request.action === 'com.duo.getCurrentGuideOnlineSession') {
+        fetchAllCurrentUserData().then(({ user, loginData }) => {
+            if (user == null || loginData == null || loginData.id == null)
+                return sendResponse({ error: 'Not signed in' })
+            
+            api.get(`/students/${loginData.id}/tutoring-sessions/current-guide-online`)
+                .then(sendResponse)
+                .catch(sendErrorResponse(sendResponse))
+        })
+
         return true
     }
 

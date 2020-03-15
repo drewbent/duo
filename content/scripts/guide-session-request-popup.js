@@ -10,7 +10,7 @@ var _guideRequestCurrentSession = null
 _fetchPendingGuideSession()
 setInterval(() => {
   _fetchPendingGuideSession()
-}, 2000)
+}, 3000)
 
 function _fetchPendingGuideSession() {
   sendMessage('com.duo.getPendingGuideSession', {}, data => {
@@ -69,7 +69,8 @@ function _injectGuideRequestPopup(cb) {
         sessionId: _guideRequestCurrentSession.id,
       }, data => {
         if (data == null) {
-          // Insert the hangout link
+          _hideRequestPendingPopup()
+          showCurrentGuideSession(_guideRequestCurrentSession, _guideRequestCurrentLearner)
         } else {
           flashError(popup, data.error)
         }
