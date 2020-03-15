@@ -36,9 +36,13 @@ function sendAuthReq(path, data, idToken) {
             res()
         } else {
           // Failures are automatically logged
-          const error = new Error(response.statusText)
-          error.name = response.status
-          throw error
+          return new Promise((res, rej) => {
+            response.json().then(json => {
+              const error = new Error(json.message || response.statusText)
+              error.name = response.status
+              rej(error)
+            })
+          })
         }
       })
       .then(res)
