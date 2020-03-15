@@ -55,7 +55,7 @@ function _injectGetHelpButton(container) {
       const skill = scrapeTaskSkill()
       sendMessage('com.duo.findE4NMatches', { skill }, data => {
         if (data.error) return console.warn(data.error)
-        showStrugglingPopup(data, true)
+        showStrugglingPopup(data.matches, true, data.is_online)
       })
     })
   })

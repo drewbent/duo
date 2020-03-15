@@ -14,13 +14,13 @@ var _isGetHelp = false
  * @param {Boolean} isGetHelp Whether or not this was triggered from the 'get help'
  * button. Will affect behavior
  */
-function showStrugglingPopup(guides, isGetHelp = false) {
+function showStrugglingPopup(guides, isGetHelp = false, isOnline) {
     _isGetHelp = isGetHelp
     if (!strugglingPopupInjected) {
-        _injectStrugglingPopup(() => _injectGuides(guides))
+        _injectStrugglingPopup(() => _injectGuides(guides, isOnline))
     } else {
         if (!strugglingPopupVisible) _showStrugglingPopup()
-        _injectGuides(guides)
+        _injectGuides(guides, isOnline)
     }
 }
 
@@ -59,15 +59,20 @@ function _injectStrugglingPopup(cb) {
             })
         })
 
+        $('#duo-create-hangout-btn').click(() => {
+            sendMessage('com.duo.createHangout')
+        })
+
         strugglingPopupInjected = true
         if (cb) cb()
     })
 }
 
-function _injectGuides(guides) {
+function _injectGuides(guides, isOnline) {
     const popup = $(`#duo-sp-container`)
     const noGuidesContent = popup.find('#duo-sp-no-guides-content')
     const yesGuidesContent = popup.find('#duo-sp-find-guide-content')
+    const onlineModeContent = popup.find('#duo-sp-online-mode-content')
     const subtitle = popup.find('.duo-popup-subtitle')
     hideFlash(popup)
 
@@ -79,8 +84,12 @@ function _injectGuides(guides) {
     if (guides.length === 0) {
         subtitle.text('Looks like you\'re having trouble! Please find a classmate to help you, or go to Phil and Drew to find help.')
         hide(yesGuidesContent)
+        hide(onlineModeContent)
         show(noGuidesContent)
     } else {
+        if (isOnline) show(onlineModeContent)
+        else hide(onlineModeContent)
+
         subtitle.text('Looks like you\'re having trouble! Please find one of these students to guide you, then select their name below.')
         list.html(guides.map(guide => `
             <option class='text-normal-size' value=${guide.id}>${guide.name}</li>

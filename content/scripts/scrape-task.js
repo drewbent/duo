@@ -21,9 +21,9 @@ console.log('DUO TASK SCRAPING ACTIVE')
             try {
                 const data = {
                     ..._scrapeQuestionData(html),
-                    course: _scrapeTaskCourse(isUnitView),
-                    unit: _scrapeTaskUnit(isUnitView),
-                    skill: scrapeTaskSkill(isUnitView),
+                    course: _scrapeTaskCourse(),
+                    unit: _scrapeTaskUnit(),
+                    skill: scrapeTaskSkill(),
                     recorded_from: isUnitView() ? 'unit_view_task' : 'lesson_view_task',
                 }
                 
@@ -33,7 +33,7 @@ console.log('DUO TASK SCRAPING ACTIVE')
 
                     // If the student is struggling, guides will be sent bak
                     if (response.guides) {
-                        showStrugglingPopup(response.guides)
+                        showStrugglingPopup(response.guides, false, response.is_online)
                     }
                 })
             }
@@ -71,7 +71,8 @@ function scrapeTaskSkill() {
         else throw new Error('Failed to find skill name.')
     } else {
         // It's in the first h1
-        const header = $('h1').first()
+        const container = $('div[data-test-id="tutorial-page"]')
+        const header = container.find('h1').first() // DEFINITELY where things are failing. Find a beter way.
         return header.text()
     }
 }
