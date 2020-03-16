@@ -4,11 +4,7 @@ var _requestPendingPopupVisible = false
 var _requestPendingCurrentGuide = null
 var _requestPendingCurrentSession = null
 
-// NEEDS TO FETCH THE SESSION BASED ON ID
-
 function showRequestPendingPopup(session, guide) {
-  console.log(session)
-  console.log(guide)
   _requestPendingCurrentSession = session
   _requestPendingCurrentGuide = guide
   if (_requestPendingPopupInjected) {
@@ -85,7 +81,7 @@ function _fetchCurrentSession() {
       case 'not_applicable':
       case 'accepted':
         _hideRequestPendingPopup()
-        _showSessionOverlay(guide, data)
+        showSessionOverlay(guide, data)
         console.log('Session accepted')
         break
       case 'rejected':

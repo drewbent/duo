@@ -5,9 +5,9 @@
 var sessionOverlayVisible = false
 var sessionOverlayInjected = false
 
-var currentGuide = undefined
+var currentGuide = {}
 // var currentGuide = { name: 'Bob', id: '10' }
-var currentSession = undefined
+var currentSession = {}
 // var currentSession = { id: 1 }
 
 /**
@@ -40,7 +40,7 @@ function checkForCurrentSession() {
  * @param {Object} session 
  */
 function showSessionOverlay(guide, session) {
-    if (!guide || !session) {
+    if (guide == null || session == null) {
         console.log('Invalid guide/session passed to session overlay:')
         console.log(JSON.stringify(guide))
         console.log(JSON.stringify(session))
@@ -49,6 +49,7 @@ function showSessionOverlay(guide, session) {
 
     currentGuide = guide
     currentSession = session
+    console.log(session)
 
     if (!sessionOverlayInjected) {
         _injectSessionOverlay()
