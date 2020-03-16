@@ -88,6 +88,9 @@ function _fetchCurrentSession() {
         _hideRequestPendingPopup()
         alert(`${guide.name} has rejected your request: ${data.rejection_note}`)
         break
+      case 'cancelled':
+        _hideRequestPendingPopup()
+        break
     }
   })
 }
