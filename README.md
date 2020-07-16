@@ -25,7 +25,7 @@ Chrome extension client for the Duo project.
 
 1-on-1 peer learning for Khan Academy.
 
-Duo is a Chrome extension for students in the Khan Lab School or Oxford Day Academy PeerX classes to engage in peer learning. It is not intended for widespread public use and is not currently being mantained, although you are welcome to draw inspiration or adapt from it. It is licensed under the terms of the MIT license.
+Duo is a Chrome extension for students in the Khan Lab School or Oxford Day Academy PeerX classes to engage in peer learning. It is not intended for widespread public use and is not currently being maintained, although you are welcome to draw inspiration or adapt from it. It is licensed under the terms of the MIT license.
 
 The project was created by Drew Bent and Phil Shen in 2020.
 
