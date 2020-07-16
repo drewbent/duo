@@ -33,6 +33,11 @@ The project was created by Drew Bent and Phil Shen in 2020.
 - [Video overview](https://www.youtube.com/watch?v=HqCNxhVDSgs)
 - [Chrome extension used in KLS and ODA classes](http://bit.ly/chromeduo)
 
+### Repositories
+- [Chrome extension](https://github.com/drewbent/duo)
+- [Backend and API](https://github.com/drewbent/duo-backend)
+- [Admin dashboard](https://github.com/drewbent/duo-admin)
+
 ## Set Up
 
 To run the Chrome extension:
